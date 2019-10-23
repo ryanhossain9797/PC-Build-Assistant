@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Center(
-              child: Text(userName),
+              child: Text("username: " + userName),
             ),
             SizedBox.fromSize(size: Size(1, 20)),
             Padding(
