@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "543131118937",
+    "firebase_url": "https://pc-build-assistant.firebaseio.com",
+    "project_id": "pc-build-assistant",
+    "storage_bucket": "pc-build-assistant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543131118937:android:fd78fc7a2c212cfcea3048",
+        "android_client_info": {
+          "package_name": "com.example.zireael.pc_build_assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543131118937-cv70k5hh4ai855f51d8kndv01p0u9b7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfXVffKIsmUhiTs83JpD9AJuwj1XUI55Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543131118937-cv70k5hh4ai855f51d8kndv01p0u9b7g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
