@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //              ),
               AnimatedAlign(
                 curve: Curves.decelerate,
-                duration: Duration(milliseconds: 300),
+                duration: Duration(milliseconds: 200),
                 alignment:
                     index == 0 ? Alignment.centerLeft : Alignment.centerRight,
                 child: Container(
@@ -129,12 +129,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         key: _componentsKey,
                         child: Center(
-                          child: Text(
-                            "Components",
-                            style: TextStyle(
-                                fontWeight: index == 0
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                          child: AnimatedDefaultTextStyle(
+                            duration: Duration(milliseconds: 100),
+                            style: index == 0
+                                ? TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)
+                                : TextStyle(fontSize: 14),
+                            child: Text("Components"),
                           ),
                         ),
                       ),
@@ -155,12 +156,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         key: _buildKey,
                         child: Center(
-                          child: Text(
-                            "My Build",
-                            style: TextStyle(
-                                fontWeight: index == 1
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                          child: AnimatedDefaultTextStyle(
+                            duration: Duration(milliseconds: 100),
+                            style: index == 1
+                                ? TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)
+                                : TextStyle(fontSize: 14),
+                            child: Text("My Build"),
                           ),
                         ),
                       ),
