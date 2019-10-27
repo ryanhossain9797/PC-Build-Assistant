@@ -10,7 +10,6 @@ import 'screens/welcome_screen.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    systemNavigationBarColor: ThemeData.dark().scaffoldBackgroundColor,
   ));
   return runApp(MyApp());
 }

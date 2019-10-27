@@ -85,3 +85,9 @@ const kPasswordTooShort = "ERROR_WEAK_PASSWORD";
 const kInvalidEmail = "ERROR_INVALID_EMAIL";
 const kWrongEmail = "ERROR_USER_NOT_FOUND";
 const kWrongPass = "ERROR_WRONG_PASSWORD";
+
+const kNavBarButtonShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(
+    Radius.circular(kRadius),
+  ),
+);
