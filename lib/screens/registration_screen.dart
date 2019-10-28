@@ -46,7 +46,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text(
+          "Register",
+          style: TextStyle(fontFamily: "Rodin"),
+        ),
         centerTitle: true,
       ),
       body: ModalProgressHUD(

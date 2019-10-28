@@ -60,7 +60,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 Expanded(
                   child: TypewriterAnimatedTextKit(
-                    isRepeatingAnimation: false,
                     duration: Duration(seconds: 10),
                     text: ["PC Build Assistant"],
                     textStyle: kAnimatedTextStyle,

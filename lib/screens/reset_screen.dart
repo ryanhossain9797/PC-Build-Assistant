@@ -38,7 +38,10 @@ class _ResetScreenState extends State<ResetScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reset Password"),
+        title: Text(
+          "Reset Password",
+          style: TextStyle(fontFamily: "Rodin"),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,

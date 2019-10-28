@@ -59,6 +59,7 @@ const kAnimatedTextStyle = TextStyle(
   color: Colors.white,
   fontSize: 24.0,
   fontWeight: FontWeight.w900,
+  fontFamily: "Rodin",
 );
 
 const kSendButtonTextStyle = TextStyle(

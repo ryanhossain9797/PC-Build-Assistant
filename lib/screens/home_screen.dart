@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pc_build_assistant/components/pc_component.dart';
 import 'package:pc_build_assistant/components/rounded_button.dart';
 import 'package:pc_build_assistant/constants.dart';
 
@@ -15,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _currentUser;
   String userName = "No One Logged In";
-  int index = 0;
+  int _index = 0;
 
   GlobalKey _componentsKey = GlobalKey();
   GlobalKey _buildKey = GlobalKey();
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (user != null) {
         setState(() {
           _currentUser = user;
-          userName = user.email;
+          userName = _currentUser.email;
         });
       }
     } catch (excp) {
@@ -62,60 +64,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("PC Build Assistant"),
+        title: Text(
+          "PC Build Assistant",
+          style: TextStyle(fontFamily: "Rodin"),
+        ),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.transparent,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 24),
           height: 50,
           child: Stack(
             children: <Widget>[
-//              Row(
-//                children: <Widget>[
-//                  Expanded(
-//                    child: Container(
-//                      decoration: BoxDecoration(
-//                        color:
-//                            index == 0 ? kLoginButtonColor : Colors.transparent,
-//                        borderRadius: BorderRadius.only(
-//                          topLeft: Radius.circular(kRadius),
-//                          topRight: Radius.circular(kRadius),
-//                        ),
-//                      ),
-//                    ),
-//                  ),
-//                  Container(
-//                    width: 4,
-//                  ),
-//                  Expanded(
-//                    child: Container(
-//                      decoration: BoxDecoration(
-//                        color:
-//                            index == 1 ? kLoginButtonColor : Colors.transparent,
-//                        borderRadius: BorderRadius.only(
-//                          topLeft: Radius.circular(kRadius),
-//                          topRight: Radius.circular(kRadius),
-//                        ),
-//                      ),
-//                    ),
-//                  ),
-//                ],
-//              ),
               AnimatedAlign(
                 curve: Curves.decelerate,
-                duration: Duration(milliseconds: 200),
+                duration: Duration(milliseconds: 300),
                 alignment:
-                    index == 0 ? Alignment.centerLeft : Alignment.centerRight,
-                child: Container(
+                    _index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
                   width: _tabWidth,
                   height: _tabHeight,
                   decoration: BoxDecoration(
                     color: kLoginButtonColor,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(kRadius),
-                      topRight: Radius.circular(kRadius),
+                      topLeft: _index == 1 ? Radius.circular(30) : Radius.zero,
+                      topRight: _index == 0 ? Radius.circular(30) : Radius.zero,
                     ),
                   ),
                 ),
@@ -129,25 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         key: _componentsKey,
                         child: Center(
-                          child: AnimatedDefaultTextStyle(
-                            duration: Duration(milliseconds: 100),
-                            style: index == 0
-                                ? TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)
-                                : TextStyle(fontSize: 14),
-                            child: Text("Components"),
+                          child: Icon(
+                            FontAwesomeIcons.shoppingCart,
+                            size: _index == 0 ? 22 : 20,
                           ),
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          index = 0;
+                          _index = 0;
                         });
                       },
                     ),
                   ),
                   Container(
-                    width: 4,
+                    width: 10,
                   ),
                   Expanded(
                     child: InkWell(
@@ -156,19 +126,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         key: _buildKey,
                         child: Center(
-                          child: AnimatedDefaultTextStyle(
-                            duration: Duration(milliseconds: 100),
-                            style: index == 1
-                                ? TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)
-                                : TextStyle(fontSize: 14),
-                            child: Text("My Build"),
+                          child: Icon(
+                            FontAwesomeIcons.screwdriver,
+                            size: _index == 1 ? 22 : 20,
                           ),
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          index = 1;
+                          _index = 1;
                         });
                       },
                     ),
@@ -190,18 +156,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: IndexedStack(
-                index: index,
+                index: _index,
                 children: <Widget>[
-                  Center(
-                    child: Text("First"),
+                  ListView(
+                    children: <Widget>[
+                      PCComponent(title: "First 1"),
+                      PCComponent(title: "First 2"),
+                      PCComponent(title: "First 3"),
+                    ],
                   ),
-                  Center(
-                    child: Text("Second"),
-                  ),
+                  ListView(
+                    children: <Widget>[
+                      PCComponent(title: "Second 1"),
+                      PCComponent(title: "Second 2"),
+                      PCComponent(title: "Second 3"),
+                    ],
+                  )
                 ],
               ),
             ),
-            SizedBox.fromSize(size: Size(1, 20)),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Hero(

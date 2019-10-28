@@ -22,15 +22,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.light().copyWith(
-          appBarTheme: AppBarTheme(
-        color: Colors.transparent,
-        elevation: 0.0,
-      )),
+        textTheme: TextTheme().apply(fontFamily: "Rodin"),
+        appBarTheme: AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0.0,
+        ),
+      ),
       darkTheme: ThemeData.dark().copyWith(
-          appBarTheme: AppBarTheme(
-        color: Colors.transparent,
-        elevation: 0.0,
-      )),
+        appBarTheme: AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0.0,
+        ),
+      ),
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
