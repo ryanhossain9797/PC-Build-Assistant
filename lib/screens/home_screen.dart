@@ -6,6 +6,8 @@ import 'package:pc_build_assistant/components/pc_component.dart';
 import 'package:pc_build_assistant/components/rounded_button.dart';
 import 'package:pc_build_assistant/constants.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
+import 'package:pc_build_assistant/screens/user_screen.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 class HomeScreen extends StatefulWidget {
   static String id = "/homeScreenId";
@@ -17,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _currentUser;
-  String _userName;
   int _index = 0;
 
   GlobalKey _componentsKey = GlobalKey();
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getCurrentUser();
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => initialSize());
   }
 
@@ -52,12 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseUser user;
     try {
       user = await _auth.currentUser();
-      if (user != null) {
-        setState(() {
-          _currentUser = user;
-          _userName = _currentUser.email;
-        });
-      }
+      setState(() {
+        _currentUser = user;
+      });
     } catch (excp) {
       print("error occured $excp");
     }
@@ -82,21 +81,27 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 if (_currentUser == null) {
                   await Navigator.pushNamed(context, LoginScreen.id);
-                  getCurrentUser();
+                } else {
+                  await Navigator.pushNamed(context, UserScreen.id);
                 }
+                getCurrentUser();
               },
-              child: CircleAvatar(
-                backgroundColor: kContinueButtonColor,
-                child: _userName != null
-                    ? Text(
-                        _userName.substring(0, 1).toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      )
-                    : Icon(
-                        Icons.person,
-                        color: Colors.white,
+              child: _currentUser != null
+                  ? CircleAvatar(
+                      child: ClipOval(
+                        child: Image.network(
+                          Gravatar(_currentUser.email).imageUrl(
+                            defaultImage: GravatarImage.retro,
+                            fileExtension: true,
+                          ),
+                        ),
                       ),
-              ),
+                    )
+                  : CircleAvatar(
+                      backgroundColor: kLoginButtonColor,
+                      foregroundColor: Color(0xFFFFFFFF),
+                      child: Icon(Icons.person),
+                    ),
             ),
           )
         ],

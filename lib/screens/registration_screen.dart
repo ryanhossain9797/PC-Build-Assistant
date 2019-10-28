@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,19 +45,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Register",
-          style: TextStyle(fontFamily: "Rodin"),
-        ),
-        centerTitle: true,
+    return ModalProgressHUD(
+      progressIndicator: TyperAnimatedTextKit(
+        isRepeatingAnimation: false,
+        duration: Duration(milliseconds: 600),
+        text: ["Registering"],
+        textStyle: ThemeData.fallback()
+            .accentTextTheme
+            .display1
+            .copyWith(color: Colors.white, fontFamily: "Rodin", fontSize: 20),
       ),
-      body: ModalProgressHUD(
-        // Encapsulates The Entire Body With a Progress Indicator
-        color: kRegisterButtonColor,
-        inAsyncCall: _busy,
-        child: Padding(
+      color: kLoginButtonColor,
+      inAsyncCall: _busy,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Register",
+            style: TextStyle(fontFamily: "Rodin"),
+          ),
+          centerTitle: true,
+        ),
+        body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -83,6 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: TextField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
                   decoration: kRegisterTextFieldDecoration.copyWith(
                       hintText: "Your Email"),

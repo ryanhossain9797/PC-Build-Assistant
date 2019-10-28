@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,18 +41,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Login",
-          style: TextStyle(fontFamily: "Rodin"),
-        ),
-        centerTitle: true,
+    return ModalProgressHUD(
+      progressIndicator: TyperAnimatedTextKit(
+        isRepeatingAnimation: false,
+        duration: Duration(milliseconds: 600),
+        text: ["Loading"],
+        textStyle: ThemeData.fallback()
+            .accentTextTheme
+            .display1
+            .copyWith(color: Colors.white, fontFamily: "Rodin", fontSize: 20),
       ),
-      body: ModalProgressHUD(
-        color: kLoginButtonColor,
-        inAsyncCall: _busy,
-        child: Padding(
+      color: kLoginButtonColor,
+      inAsyncCall: _busy,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Login",
+            style: TextStyle(fontFamily: "Rodin"),
+          ),
+          centerTitle: true,
+        ),
+        body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: TextField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
                   decoration: kLoginTextFieldDecoration.copyWith(
                       hintText: "Your Email"),
@@ -117,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             _busy = false;
                           });
                           Navigator.popUntil(context, (route) {
-                            print(route.settings.name);
                             if (route.settings.name == WelcomeScreen.id) {
                               Navigator.pushNamed(context, HomeScreen.id);
                               return true;
