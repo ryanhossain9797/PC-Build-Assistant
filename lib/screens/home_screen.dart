@@ -77,9 +77,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onTap: () async {
-                await Navigator.pushNamed(context, LoginScreen.id);
-                getCurrentUser();
+                if (_currentUser == null) {
+                  await Navigator.pushNamed(context, LoginScreen.id);
+                  getCurrentUser();
+                }
               },
               child: CircleAvatar(
                 backgroundColor: kContinueButtonColor,
