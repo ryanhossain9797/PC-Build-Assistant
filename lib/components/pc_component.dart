@@ -10,7 +10,7 @@ class PCComponent extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: kLoginButtonColor,
+        color: kContinueButtonColor,
         borderRadius: BorderRadius.all(
           Radius.circular(kRadius),
         ),

@@ -6,6 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:pc_build_assistant/components/rounded_button.dart';
 import 'package:pc_build_assistant/constants.dart';
 import 'package:pc_build_assistant/screens/reset_screen.dart';
+import 'package:pc_build_assistant/screens/welcome_screen.dart';
 
 import 'home_screen.dart';
 
@@ -115,7 +116,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             _busy = false;
                           });
-                          Navigator.pushNamed(context, HomeScreen.id);
+                          Navigator.popUntil(context, (route) {
+                            print(route.settings.name);
+                            if (route.settings.name == WelcomeScreen.id) {
+                              Navigator.pushNamed(context, HomeScreen.id);
+                              return true;
+                            } else if (route.settings.name == HomeScreen.id) {
+                              return true;
+                            }
+                            return false;
+                          });
                         }
                       } catch (e) {
                         print(e.toString());

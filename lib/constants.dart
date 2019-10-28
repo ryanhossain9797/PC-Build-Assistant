@@ -92,3 +92,5 @@ const kNavBarButtonShape = RoundedRectangleBorder(
     Radius.circular(kRadius),
   ),
 );
+
+const Duration kAnimationDuration = Duration(milliseconds: 500);
