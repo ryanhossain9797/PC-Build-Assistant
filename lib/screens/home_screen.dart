@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/components/pc_component.dart';
-import 'package:pc_build_assistant/components/rounded_button.dart';
 import 'package:pc_build_assistant/constants.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
@@ -107,143 +106,131 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      //------------------------------------------ BOTTOM NAVBAR--------------------------------------------------
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: Container(
-          height: 50,
-          child: Stack(
+      //---------------------------------------BODY OF APP----------------------------------------------
+      body: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: <Widget>[
+          PageView(
+            onPageChanged: (index) {
+              setState(() {
+                _index = index;
+              });
+            },
+            controller: _pageController,
+            pageSnapping: true,
             children: <Widget>[
-              //----------------------------------TAB BUTTON------------------------------------------------------
-              AnimatedAlign(
-                curve: Curves.decelerate,
-                duration: kAnimationDuration,
-                alignment:
-                    _index == 0 ? Alignment.centerLeft : Alignment.centerRight,
-                child: AnimatedContainer(
-                  duration: kAnimationDuration,
-                  width: _tabWidth,
-                  height: _tabHeight,
-                  decoration: BoxDecoration(
-                    color: kContinueButtonColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: _index == 1 ? Radius.circular(30) : Radius.zero,
-                      topRight: _index == 0 ? Radius.circular(30) : Radius.zero,
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ListView(
+                  children: <Widget>[
+                    PCComponent(title: "First 1"),
+                    PCComponent(title: "First 2"),
+                    PCComponent(title: "First 3"),
+                    PCComponent(title: "First 4"),
+                    PCComponent(title: "First 5"),
+                    PCComponent(title: "First 6"),
+                  ],
                 ),
               ),
-
-              //-------------------------------------TOP ICONS------------------------------------------
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        key: _componentsKey,
-                        child: Center(
-                          child: Icon(
-                            FontAwesomeIcons.shoppingCart,
-                            size: _index == 0 ? 22 : 20,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _index = 0;
-                          _pageController.animateToPage(0,
-                              duration: kAnimationDuration,
-                              curve: Curves.decelerate);
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        key: _buildKey,
-                        child: Center(
-                          child: Icon(
-                            FontAwesomeIcons.screwdriver,
-                            size: _index == 1 ? 22 : 20,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _index = 1;
-                          _pageController.animateToPage(1,
-                              duration: kAnimationDuration,
-                              curve: Curves.decelerate);
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ListView(
+                  children: <Widget>[
+                    PCComponent(title: "Second 1"),
+                    PCComponent(title: "Second 2"),
+                    PCComponent(title: "Second 3"),
+                    PCComponent(title: "Second 4"),
+                    PCComponent(title: "Second 5"),
+                    PCComponent(title: "Second 6"),
+                  ],
+                ),
+              )
             ],
           ),
-        ),
-      ),
 
-      //---------------------------------------BODY OF APP----------------------------------------------
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            //-----------------------------------MAIN PAGES----------------------------------------
-            child: PageView(
-              onPageChanged: (index) {
-                setState(() {
-                  _index = index;
-                });
-              },
-              controller: _pageController,
-              pageSnapping: true,
+          //---------------------------------------------BOTTOM NAVBAR---------------------------------------------
+          Container(
+            height: 50,
+            child: Stack(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: ListView(
-                    children: <Widget>[
-                      PCComponent(title: "First 1"),
-                      PCComponent(title: "First 2"),
-                      PCComponent(title: "First 3"),
-                    ],
+                //----------------------------------TAB BUTTON------------------------------------------------------
+                AnimatedAlign(
+                  curve: Curves.decelerate,
+                  duration: kAnimationDuration,
+                  alignment: _index == 0
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: AnimatedContainer(
+                    duration: kAnimationDuration,
+                    width: _tabWidth,
+                    height: _tabHeight,
+                    decoration: BoxDecoration(
+                      color: kTabButtonColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft:
+                            _index == 1 ? Radius.circular(30) : Radius.zero,
+                        topRight:
+                            _index == 0 ? Radius.circular(30) : Radius.zero,
+                      ),
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: ListView(
-                    children: <Widget>[
-                      PCComponent(title: "Second 1"),
-                      PCComponent(title: "Second 2"),
-                      PCComponent(title: "Second 3"),
-                    ],
-                  ),
-                )
+
+                //-------------------------------------TOP ICONS------------------------------------------
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: Container(
+                          key: _componentsKey,
+                          child: Center(
+                            child: Icon(
+                              FontAwesomeIcons.shoppingCart,
+                              size: _index == 0 ? 22 : 20,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _index = 0;
+                            _pageController.animateToPage(0,
+                                duration: kAnimationDuration,
+                                curve: Curves.decelerate);
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: Container(
+                          key: _buildKey,
+                          child: Center(
+                            child: Icon(
+                              FontAwesomeIcons.screwdriver,
+                              size: _index == 1 ? 22 : 20,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _index = 1;
+                            _pageController.animateToPage(1,
+                                duration: kAnimationDuration,
+                                curve: Curves.decelerate);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-            child: Hero(
-              tag: 'signoutButton',
-              child: RoundedButton(
-                title: 'Sign Out',
-                onPressed: () async {
-                  await _auth.signOut();
-                  Navigator.pop(context);
-                },
-                color: Colors.red,
-              ),
             ),
           ),
         ],

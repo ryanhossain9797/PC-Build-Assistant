@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 const Color kLoginButtonColor = Color(0xFF4B93E3);
 const Color kRegisterButtonColor = Color(0xFF5CD1E4);
 const Color kContinueButtonColor = Color(0xFFA8A99F);
-const Color kRedButtonColor = Colors.red;
+const Color kRedButtonColor = Color(0xFFFF3333);
+const Color kTabButtonColor = Color(0xCC6611FF);
 
 const double kRadius = 10.0;
 
