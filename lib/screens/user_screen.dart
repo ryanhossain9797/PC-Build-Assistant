@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pc_build_assistant/components/rounded_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
+import 'package:pc_build_assistant/components/rounded_button_widget.dart';
 import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/screens/add_component.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
 
 class UserScreen extends StatefulWidget {
@@ -33,7 +36,22 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserScreenArguments args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
+      floatingActionButton: _currentUser != null
+          ? (_currentUser.email == "ryanhossain9797@gmail.com"
+              ? FloatingActionButton(
+                  backgroundColor: kLoginButtonColor,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddScreen.id);
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                )
+              : null)
+          : null,
       appBar: AppBar(
         title: Text(
           _currentUser != null ? _currentUser.email : "User",
@@ -47,29 +65,21 @@ class _UserScreenState extends State<UserScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              ClipOval(
-                child: _currentUser != null
-                    ? CircleAvatar(
-                        radius: 80,
-                        child: ClipOval(
-                          child: Image.network(
-                            Gravatar(_currentUser.email).imageUrl(
-                              defaultImage: GravatarImage.retro,
-                              size: 300,
-                              fileExtension: true,
-                            ),
-                          ),
-                        ),
-                      )
-                    : CircleAvatar(
-                        radius: 80,
-                        backgroundColor: kLoginButtonColor,
-                        foregroundColor: Color(0xFFFFFFFF),
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                        ),
-                      ),
+              Hero(
+                tag: "avatar",
+                child: CircleAvatar(
+                  radius: 80,
+                  child: ClipOval(
+                      child: _currentUser != null
+                          ? Image.network(
+                              Gravatar(_currentUser.email).imageUrl(
+                                defaultImage: GravatarImage.retro,
+                                size: 300,
+                                fileExtension: true,
+                              ),
+                            )
+                          : args.avatar),
+                ),
               ),
               Container(
                 child: Row(
@@ -80,13 +90,13 @@ class _UserScreenState extends State<UserScreen> {
                       foregroundColor: Color(0xFFFFFFFF),
                       radius: 30,
                       child: Icon(
-                        Icons.person,
+                        FontAwesomeIcons.user,
                         size: 30,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Icon(Icons.arrow_forward),
+                      child: Icon(Icons.arrow_back),
                     ),
                     CircleAvatar(
                       radius: 30,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
 
+import 'screens/add_component.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/registration_screen.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         ResetScreen.id: (context) => ResetScreen(),
         UserScreen.id: (context) => UserScreen(),
+        AddScreen.id: (context) => AddScreen(),
       },
       initialRoute: WelcomeScreen.id,
     );

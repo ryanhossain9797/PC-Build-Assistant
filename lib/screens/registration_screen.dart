@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:pc_build_assistant/components/rounded_button.dart';
+import 'package:pc_build_assistant/components/rounded_button_widget.dart';
 import 'package:pc_build_assistant/constants.dart';
 
 import 'home_screen.dart';

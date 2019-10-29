@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pc_build_assistant/components/pc_component.dart';
+import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
+import 'package:pc_build_assistant/components/pc_component_widget.dart';
 import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/database_fake.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
@@ -81,26 +83,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (_currentUser == null) {
                   await Navigator.pushNamed(context, LoginScreen.id);
                 } else {
-                  await Navigator.pushNamed(context, UserScreen.id);
+                  await Navigator.pushNamed(
+                    context,
+                    UserScreen.id,
+                    arguments: UserScreenArguments(
+                      Image.network(
+                        Gravatar(_currentUser.email).imageUrl(
+                          defaultImage: GravatarImage.retro,
+                          size: 300,
+                          fileExtension: true,
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 getCurrentUser();
               },
-              child: _currentUser != null
-                  ? CircleAvatar(
-                      child: ClipOval(
-                        child: Image.network(
-                          Gravatar(_currentUser.email).imageUrl(
-                            defaultImage: GravatarImage.retro,
-                            fileExtension: true,
+              child: Hero(
+                tag: "avatar",
+                child: _currentUser != null
+                    ? CircleAvatar(
+                        child: ClipOval(
+                          child: Image.network(
+                            Gravatar(_currentUser.email).imageUrl(
+                              defaultImage: GravatarImage.retro,
+                              size: 300,
+                              fileExtension: true,
+                            ),
                           ),
                         ),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Color(0xFFFFFFFF),
+                        child: Icon(
+                          FontAwesomeIcons.user,
+                          size: 20,
+                        ),
                       ),
-                    )
-                  : CircleAvatar(
-                      backgroundColor: kLoginButtonColor,
-                      foregroundColor: Color(0xFFFFFFFF),
-                      child: Icon(Icons.person),
-                    ),
+              ),
             ),
           )
         ],
@@ -121,28 +142,24 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView(
-                  children: <Widget>[
-                    PCComponent(title: "First 1"),
-                    PCComponent(title: "First 2"),
-                    PCComponent(title: "First 3"),
-                    PCComponent(title: "First 4"),
-                    PCComponent(title: "First 5"),
-                    PCComponent(title: "First 6"),
-                  ],
+                child: ListView.builder(
+                  itemCount: FakeDataBase.components.length,
+                  itemBuilder: (context, index) {
+                    return PCComponent(
+                      component: FakeDataBase.components[index],
+                    );
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView(
-                  children: <Widget>[
-                    PCComponent(title: "Second 1"),
-                    PCComponent(title: "Second 2"),
-                    PCComponent(title: "Second 3"),
-                    PCComponent(title: "Second 4"),
-                    PCComponent(title: "Second 5"),
-                    PCComponent(title: "Second 6"),
-                  ],
+                child: ListView.builder(
+                  itemCount: FakeDataBase.components.length,
+                  itemBuilder: (context, index) {
+                    return PCComponent(
+                      component: FakeDataBase.components[index],
+                    );
+                  },
                 ),
               )
             ],

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/models/pc_component.dart';
 
 class PCComponent extends StatelessWidget {
-  final String title;
-  const PCComponent({Key key, @required this.title}) : super(key: key);
+  final PCComponentModel component;
+  const PCComponent({Key key, @required this.component}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,11 @@ class PCComponent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "EVGA",
+                          component.manufacturer,
                           style: TextStyle(fontFamily: "Rodin", fontSize: 20),
                         ),
                         Text(
-                          "EVGA Gtx 780ti Founder's Edition",
+                          component.name,
                         ),
                       ],
                     ),
@@ -54,8 +55,9 @@ class PCComponent extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("VRAM: 3GB"),
-                      Text("TDP: 150Watts")
+                      Text(
+                        component.description,
+                      ),
                     ],
                   ),
                 ),
