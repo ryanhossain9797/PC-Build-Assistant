@@ -178,13 +178,19 @@ class _HomeScreenState extends State<HomeScreen> {
               components.length > 0
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        itemCount: components.length,
-                        itemBuilder: (context, index) {
-                          return PCComponent(
-                            component: components[index],
-                          );
+                      child: RefreshIndicator(
+                        color: kLoginButtonColor,
+                        onRefresh: () async {
+                          getData();
                         },
+                        child: ListView.builder(
+                          itemCount: components.length,
+                          itemBuilder: (context, index) {
+                            return PCComponent(
+                              component: components[index],
+                            );
+                          },
+                        ),
                       ),
                     )
                   : Center(
@@ -193,13 +199,19 @@ class _HomeScreenState extends State<HomeScreen> {
               components.length > 0
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        itemCount: components.length,
-                        itemBuilder: (context, index) {
-                          return PCComponent(
-                            component: components[index],
-                          );
+                      child: RefreshIndicator(
+                        color: kLoginButtonColor,
+                        onRefresh: () async {
+                          getData();
                         },
+                        child: ListView.builder(
+                          itemCount: components.length,
+                          itemBuilder: (context, index) {
+                            return PCComponent(
+                              component: components[index],
+                            );
+                          },
+                        ),
                       ),
                     )
                   : Center(
