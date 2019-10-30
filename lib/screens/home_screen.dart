@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -5,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
 import 'package:pc_build_assistant/components/pc_component_widget.dart';
 import 'package:pc_build_assistant/constants.dart';
-import 'package:pc_build_assistant/database_fake.dart';
+import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
@@ -29,10 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
   double _tabWidth = 0;
   double _tabHeight = 0;
 
+  static List<PCComponentModel> components = new List<PCComponentModel>();
+
   PageController _pageController = PageController();
   @override
   void initState() {
     getCurrentUser();
+    getData();
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => initialSize());
@@ -60,6 +64,37 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (excp) {
       print("error occured $excp");
+    }
+  }
+
+  getData() async {
+    print("called getdata");
+    Firestore database = Firestore.instance;
+    try {
+      List<Map<String, dynamic>> componentList;
+      QuerySnapshot collection =
+          await database.collection('pc-components').getDocuments();
+      List<DocumentSnapshot> documents = collection.documents;
+      componentList = documents.map((DocumentSnapshot snapshot) {
+        return snapshot.data;
+      }).toList();
+      components.clear();
+      for (Map<String, dynamic> item in componentList) {
+        setState(
+          () {
+            components.add(
+              PCComponentModel(
+                manufacturer: item["manufacturer"],
+                name: item["name"],
+                description: item["description"],
+                imgurl: item["imgurl"],
+              ),
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -140,28 +175,36 @@ class _HomeScreenState extends State<HomeScreen> {
             controller: _pageController,
             pageSnapping: true,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.builder(
-                  itemCount: FakeDataBase.components.length,
-                  itemBuilder: (context, index) {
-                    return PCComponent(
-                      component: FakeDataBase.components[index],
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.builder(
-                  itemCount: FakeDataBase.components.length,
-                  itemBuilder: (context, index) {
-                    return PCComponent(
-                      component: FakeDataBase.components[index],
-                    );
-                  },
-                ),
-              )
+              components.length > 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        itemCount: components.length,
+                        itemBuilder: (context, index) {
+                          return PCComponent(
+                            component: components[index],
+                          );
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: Text("Loading"),
+                    ),
+              components.length > 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        itemCount: components.length,
+                        itemBuilder: (context, index) {
+                          return PCComponent(
+                            component: components[index],
+                          );
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: Text("Loading"),
+                    ),
             ],
           ),
 

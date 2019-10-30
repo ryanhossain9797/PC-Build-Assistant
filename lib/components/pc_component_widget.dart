@@ -25,7 +25,7 @@ class PCComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.network(
-                  "https://www.evga.com/articles/00795/images/hero/780Ti_HeroCombo.png",
+                  component.imgurl,
                   width: 100,
                   height: 100,
                 ),
@@ -64,7 +64,7 @@ class PCComponent extends StatelessWidget {
                 RawMaterialButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(kRadius)),
-                  fillColor: Colors.green,
+                  fillColor: kLoginButtonColor,
                   child: Icon(Icons.add),
                   onPressed: () {},
                 )
