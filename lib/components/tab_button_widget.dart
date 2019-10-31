@@ -4,15 +4,15 @@ class TabButton extends StatelessWidget {
   const TabButton(
       {Key key,
       @required GlobalKey<State<StatefulWidget>> componentsKey,
-      @required int index,
+      @required bool selected,
       @required IconData icon})
       : _componentsKey = componentsKey,
-        _index = index,
+        _selected = selected,
         _icon = icon,
         super(key: key);
 
   final GlobalKey<State<StatefulWidget>> _componentsKey;
-  final int _index;
+  final bool _selected;
   final IconData _icon;
 
   @override
@@ -22,7 +22,7 @@ class TabButton extends StatelessWidget {
       child: Center(
         child: Icon(
           _icon,
-          size: _index == 0 ? 22 : 20,
+          size: _selected ? 22 : 20,
         ),
       ),
     );

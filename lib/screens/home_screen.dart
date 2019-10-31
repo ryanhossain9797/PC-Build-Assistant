@@ -280,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         splashColor: Colors.transparent,
                         child: TabButton(
                           componentsKey: _componentsKey,
-                          index: _index,
+                          selected: _index == 0 ? true : false,
                           icon: FontAwesomeIcons.shoppingCart,
                         ),
                         onTap: () {
@@ -304,8 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         splashColor: Colors.transparent,
                         child: TabButton(
                           componentsKey: _buildKey,
-                          index: _index,
-                          icon: FontAwesomeIcons.shoppingCart,
+                          selected: _index == 1 ? true : false,
+                          icon: FontAwesomeIcons.screwdriver,
                         ),
                         onTap: () {
                           setState(
