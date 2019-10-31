@@ -10,9 +10,8 @@ import 'screens/reset_screen.dart';
 import 'screens/welcome_screen.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   return runApp(MyApp());
 }
 
@@ -21,16 +20,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.light().copyWith(
-        textTheme: TextTheme().apply(fontFamily: "Rodin"),
+        primaryTextTheme: Typography(platform: TargetPlatform.android).black,
+        textTheme: Typography(platform: TargetPlatform.android).black,
         appBarTheme: AppBarTheme(
           color: Colors.transparent,
           elevation: 0.0,
         ),
       ),
       darkTheme: ThemeData.dark().copyWith(
+        primaryTextTheme: Typography(platform: TargetPlatform.android).white,
+        textTheme: Typography(platform: TargetPlatform.android).white,
         appBarTheme: AppBarTheme(
           color: Colors.transparent,
           elevation: 0.0,
