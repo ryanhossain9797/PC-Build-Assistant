@@ -4,7 +4,9 @@ const Color kLoginButtonColor = Color(0xFF4B93E3);
 const Color kRegisterButtonColor = Color(0xFF5CD1E4);
 const Color kContinueButtonColor = Color(0xFFA8A99F);
 const Color kRedButtonColor = Color(0xFFFF3333);
-const Color kTabButtonColor = Color(0xCC6655FF);
+const Color kTabSliderColor = Color(0xCC6655FF);
+const Color kComponentBoxColor = Color(0xFF444444);
+const Color kNavShadowColor = Color(0x88000000);
 
 const double kRadius = 10.0;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pc_build_assistant/constants.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
+import 'package:pc_build_assistant/util/constants.dart';
 
 class PCComponent extends StatelessWidget {
   final PCComponentModel component;
@@ -13,6 +13,14 @@ class PCComponent extends StatelessWidget {
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
+          color: kComponentBoxColor,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF000000),
+              blurRadius: 6,
+              spreadRadius: 1,
+            ),
+          ],
           borderRadius: BorderRadius.all(
             Radius.circular(kRadius),
           ),

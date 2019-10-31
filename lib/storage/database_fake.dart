@@ -1,4 +1,4 @@
-import 'models/pc_component.dart';
+import '../models/pc_component.dart';
 
 class FakeDataBase {
   static List<PCComponentModel> fakeComponents = [

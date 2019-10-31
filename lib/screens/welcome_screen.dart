@@ -2,7 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
-import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/util/constants.dart';
 
 import 'home_screen.dart';
 import 'login_screen.dart';

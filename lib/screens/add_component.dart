@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
-import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/util/constants.dart';
 
 class AddScreen extends StatefulWidget {
   static String id = "/addScreenId";

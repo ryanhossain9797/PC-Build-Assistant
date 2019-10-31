@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,13 @@ import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
 import 'package:pc_build_assistant/components/pc_component_widget.dart';
-import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/components/tab_button_widget.dart';
+import 'package:pc_build_assistant/components/tab_slider_widget.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
+import 'package:pc_build_assistant/util/constants.dart';
+import 'package:pc_build_assistant/util/decoration.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -176,52 +180,78 @@ class _HomeScreenState extends State<HomeScreen> {
             pageSnapping: true,
             children: <Widget>[
               components.length > 0
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: RefreshIndicator(
-                        color: kLoginButtonColor,
-                        onRefresh: () async {
-                          getData();
-                        },
+                  ? RefreshIndicator(
+                      color: kLoginButtonColor,
+                      onRefresh: () async {
+                        getData();
+                      },
+                      child: Theme(
+                        data: Theme.of(context)
+                            .copyWith(accentColor: kLoginButtonColor),
                         child: ListView.builder(
                           itemCount: components.length,
                           itemBuilder: (context, index) {
-                            return PCComponent(
-                              component: components[index],
+                            return Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              child: PCComponent(
+                                component: components[index],
+                              ),
                             );
                           },
                         ),
                       ),
                     )
                   : Center(
-                      child: Text("Loading"),
+                      child: TyperAnimatedTextKit(
+                        text: ["Loading"],
+                        duration: Duration(milliseconds: 600),
+                        textStyle: loadingAnimationStyle,
+                      ),
                     ),
               components.length > 0
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: RefreshIndicator(
-                        color: kLoginButtonColor,
-                        onRefresh: () async {
-                          getData();
-                        },
+                  ? RefreshIndicator(
+                      color: kLoginButtonColor,
+                      onRefresh: () async {
+                        getData();
+                      },
+                      child: Theme(
+                        data: Theme.of(context)
+                            .copyWith(accentColor: kLoginButtonColor),
                         child: ListView.builder(
                           itemCount: components.length,
                           itemBuilder: (context, index) {
-                            return PCComponent(
-                              component: components[index],
+                            return Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              child: PCComponent(
+                                component: components[index],
+                              ),
                             );
                           },
                         ),
                       ),
                     )
                   : Center(
-                      child: Text("Loading"),
+                      child: TyperAnimatedTextKit(
+                        text: ["Loading"],
+                        duration: Duration(milliseconds: 600),
+                        textStyle: loadingAnimationStyle,
+                      ),
                     ),
             ],
           ),
 
           //---------------------------------------------BOTTOM NAVBAR---------------------------------------------
           Container(
+            margin: EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 30,
+                    spreadRadius: 0,
+                    color: kNavShadowColor,
+                    offset: Offset(0, 0))
+              ],
+            ),
             height: 50,
             child: Stack(
               children: <Widget>[
@@ -232,19 +262,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: _index == 0
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
-                  child: AnimatedContainer(
+                  child: TabSlider(
+                    left: _index == 0 ? true : false,
                     duration: kAnimationDuration,
                     width: _tabWidth,
                     height: _tabHeight,
-                    decoration: BoxDecoration(
-                      color: kTabButtonColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft:
-                            _index == 1 ? Radius.circular(30) : Radius.zero,
-                        topRight:
-                            _index == 0 ? Radius.circular(30) : Radius.zero,
-                      ),
-                    ),
+                    color: kTabSliderColor,
                   ),
                 ),
 
@@ -255,22 +278,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: InkWell(
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
-                        child: Container(
-                          key: _componentsKey,
-                          child: Center(
-                            child: Icon(
-                              FontAwesomeIcons.shoppingCart,
-                              size: _index == 0 ? 22 : 20,
-                            ),
-                          ),
+                        child: TabButton(
+                          componentsKey: _componentsKey,
+                          index: _index,
+                          icon: FontAwesomeIcons.shoppingCart,
                         ),
                         onTap: () {
-                          setState(() {
-                            _index = 0;
-                            _pageController.animateToPage(0,
-                                duration: kAnimationDuration,
-                                curve: Curves.decelerate);
-                          });
+                          setState(
+                            () {
+                              _index = 0;
+                              _pageController.animateToPage(0,
+                                  duration: kAnimationDuration,
+                                  curve: Curves.decelerate);
+                            },
+                          );
                         },
                       ),
                     ),
@@ -281,22 +302,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: InkWell(
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
-                        child: Container(
-                          key: _buildKey,
-                          child: Center(
-                            child: Icon(
-                              FontAwesomeIcons.screwdriver,
-                              size: _index == 1 ? 22 : 20,
-                            ),
-                          ),
+                        child: TabButton(
+                          componentsKey: _buildKey,
+                          index: _index,
+                          icon: FontAwesomeIcons.shoppingCart,
                         ),
                         onTap: () {
-                          setState(() {
-                            _index = 1;
-                            _pageController.animateToPage(1,
-                                duration: kAnimationDuration,
-                                curve: Curves.decelerate);
-                          });
+                          setState(
+                            () {
+                              _index = 1;
+                              _pageController.animateToPage(1,
+                                  duration: kAnimationDuration,
+                                  curve: Curves.decelerate);
+                            },
+                          );
                         },
                       ),
                     ),

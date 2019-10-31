@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
-import 'package:pc_build_assistant/constants.dart';
+import 'package:pc_build_assistant/util/constants.dart';
+import 'package:pc_build_assistant/util/decoration.dart';
 
 //import 'home_screen.dart';
 
@@ -42,10 +43,7 @@ class _ResetScreenState extends State<ResetScreen> {
         isRepeatingAnimation: false,
         duration: Duration(milliseconds: 300),
         text: ["Checking"],
-        textStyle: ThemeData.fallback()
-            .accentTextTheme
-            .display1
-            .copyWith(color: Colors.white, fontFamily: "Rodin", fontSize: 20),
+        textStyle: loadingAnimationStyle,
       ),
       color: kLoginButtonColor,
       inAsyncCall: _busy,
