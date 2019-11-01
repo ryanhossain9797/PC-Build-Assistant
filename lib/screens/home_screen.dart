@@ -1,5 +1,4 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,6 +10,7 @@ import 'package:pc_build_assistant/components/tab_slider_widget.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
+import 'package:pc_build_assistant/storage/database_helper.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 import 'package:pc_build_assistant/util/decoration.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double _tabWidth = 0;
   double _tabHeight = 0;
 
-  static List<PCComponentModel> components = new List<PCComponentModel>();
+  static List<PCComponentModel> _components = new List<PCComponentModel>();
 
   PageController _pageController = PageController();
   @override
@@ -73,33 +73,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getData() async {
     print("called getdata");
-    Firestore database = Firestore.instance;
-    try {
-      List<Map<String, dynamic>> componentList;
-      QuerySnapshot collection =
-          await database.collection('pc-components').getDocuments();
-      List<DocumentSnapshot> documents = collection.documents;
-      componentList = documents.map((DocumentSnapshot snapshot) {
-        return snapshot.data;
-      }).toList();
-      components.clear();
-      for (Map<String, dynamic> item in componentList) {
-        setState(
-          () {
-            components.add(
-              PCComponentModel(
-                manufacturer: item["manufacturer"],
-                name: item["name"],
-                description: item["description"],
-                imgurl: item["imgurl"],
-              ),
-            );
-          },
-        );
-      }
-    } catch (e) {
-      print(e.toString());
-    }
+
+    //New Technique
+    List<PCComponentModel> tempComponents = await DatabaseHelper.getData();
+    setState(() {
+      _components = tempComponents;
+    });
+    //New Technique
+
+//    Firestore database = Firestore.instance;
+//    try {
+//      List<Map<String, dynamic>> componentList;
+//      QuerySnapshot collection =
+//          await database.collection('pc-components').getDocuments();
+//      List<DocumentSnapshot> documents = collection.documents;
+//      componentList = documents.map((DocumentSnapshot snapshot) {
+//        return snapshot.data;
+//      }).toList();
+//      components.clear();
+//      for (Map<String, dynamic> item in componentList) {
+//        setState(
+//          () {
+//            components.add(
+//              PCComponentModel(
+//                manufacturer: item["manufacturer"],
+//                name: item["name"],
+//                description: item["description"],
+//                imgurl: item["imgurl"],
+//              ),
+//            );
+//          },
+//        );
+//      }
+//    } catch (e) {
+//      print(e.toString());
+//    }
   }
 
   @override
@@ -179,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
             controller: _pageController,
             pageSnapping: true,
             children: <Widget>[
-              components.length > 0
+              _components.length > 0
                   ? RefreshIndicator(
                       color: kLoginButtonColor,
                       onRefresh: () async {
@@ -189,12 +197,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         data: Theme.of(context)
                             .copyWith(accentColor: kLoginButtonColor),
                         child: ListView.builder(
-                          itemCount: components.length,
+                          itemCount: _components.length,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: PCComponent(
-                                component: components[index],
+                                component: _components[index],
                               ),
                             );
                           },
@@ -208,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         textStyle: loadingAnimationStyle,
                       ),
                     ),
-              components.length > 0
+              _components.length > 0
                   ? RefreshIndicator(
                       color: kLoginButtonColor,
                       onRefresh: () async {
@@ -218,12 +226,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         data: Theme.of(context)
                             .copyWith(accentColor: kLoginButtonColor),
                         child: ListView.builder(
-                          itemCount: components.length,
+                          itemCount: _components.length,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: PCComponent(
-                                component: components[index],
+                                component: _components[index],
                               ),
                             );
                           },
