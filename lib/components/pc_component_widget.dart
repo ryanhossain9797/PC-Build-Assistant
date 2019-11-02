@@ -20,15 +20,14 @@ class PCComponentWidget extends StatelessWidget {
           color: kComponentBoxColor,
           boxShadow: [
             BoxShadow(
-              color: Color(0xFF000000),
+              color: Color(0x44000000),
               blurRadius: 6,
-              spreadRadius: 1,
+              spreadRadius: 3,
             ),
           ],
           borderRadius: BorderRadius.all(
             Radius.circular(kRadius),
           ),
-          border: Border.all(width: 2.0, color: kContinueButtonColor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

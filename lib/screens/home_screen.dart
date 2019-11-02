@@ -74,41 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getData() async {
     print("called getdata");
-
-    //New Technique
     List<PCComponent> tempComponents = await DatabaseHelper.getData();
     setState(() {
       _components = tempComponents;
     });
-    //New Technique
-
-//    Firestore database = Firestore.instance;
-//    try {
-//      List<Map<String, dynamic>> componentList;
-//      QuerySnapshot collection =
-//          await database.collection('pc-components').getDocuments();
-//      List<DocumentSnapshot> documents = collection.documents;
-//      componentList = documents.map((DocumentSnapshot snapshot) {
-//        return snapshot.data;
-//      }).toList();
-//      components.clear();
-//      for (Map<String, dynamic> item in componentList) {
-//        setState(
-//          () {
-//            components.add(
-//              PCComponentModel(
-//                manufacturer: item["manufacturer"],
-//                name: item["name"],
-//                description: item["description"],
-//                imgurl: item["imgurl"],
-//              ),
-//            );
-//          },
-//        );
-//      }
-//    } catch (e) {
-//      print(e.toString());
-//    }
   }
 
   @override
@@ -200,6 +169,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ListView.builder(
                           itemCount: _components.length,
                           itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, top: 30),
+                                child: PCComponentWidget(
+                                  component: _components[index],
+                                  onAdd: (currentComponent) {
+                                    BuildManager.addComponent(currentComponent);
+                                  },
+                                ),
+                              );
+                            } else if (index == _components.length - 1) {
+                              return Container(
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 50),
+                                child: PCComponentWidget(
+                                  component: _components[index],
+                                  onAdd: (currentComponent) {
+                                    BuildManager.addComponent(currentComponent);
+                                  },
+                                ),
+                              );
+                            }
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: PCComponentWidget(
@@ -259,9 +251,9 @@ class _HomeScreenState extends State<HomeScreen> {
               boxShadow: [
                 BoxShadow(
                     blurRadius: 30,
-                    spreadRadius: 0,
+                    spreadRadius: 20,
                     color: kNavShadowColor,
-                    offset: Offset(0, 0))
+                    offset: Offset(0, 10))
               ],
             ),
             height: 50,
