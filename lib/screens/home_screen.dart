@@ -7,6 +7,7 @@ import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
 import 'package:pc_build_assistant/components/pc_component_widget.dart';
 import 'package:pc_build_assistant/components/tab_button_widget.dart';
 import 'package:pc_build_assistant/components/tab_slider_widget.dart';
+import 'package:pc_build_assistant/logic/build_manager.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double _tabWidth = 0;
   double _tabHeight = 0;
 
-  static List<PCComponentModel> _components = new List<PCComponentModel>();
+  static List<PCComponent> _components = new List<PCComponent>();
 
   PageController _pageController = PageController();
   @override
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("called getdata");
 
     //New Technique
-    List<PCComponentModel> tempComponents = await DatabaseHelper.getData();
+    List<PCComponent> tempComponents = await DatabaseHelper.getData();
     setState(() {
       _components = tempComponents;
     });
@@ -201,8 +202,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: PCComponent(
+                              child: PCComponentWidget(
                                 component: _components[index],
+                                onAdd: (currentComponent) {
+                                  BuildManager.addComponent(currentComponent);
+                                },
                               ),
                             );
                           },
@@ -230,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: PCComponent(
+                              child: PCComponentWidget(
                                 component: _components[index],
                               ),
                             );

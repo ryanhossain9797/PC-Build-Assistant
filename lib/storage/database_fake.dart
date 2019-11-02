@@ -1,8 +1,8 @@
 import '../models/pc_component.dart';
 
 class FakeDataBase {
-  static List<PCComponentModel> fakeComponents = [
-    PCComponentModel(
+  static List<PCComponent> fakeComponents = [
+    PCComponent(
       manufacturer: "EVGA",
       name: "GTX 780ti",
       description: "VRAM: 3GB",

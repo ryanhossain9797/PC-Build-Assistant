@@ -1,8 +1,7 @@
-class PCComponentModel {
+class PCComponent {
   final String manufacturer;
   final String name;
   final String description;
   final String imgurl;
-  PCComponentModel(
-      {this.manufacturer, this.name, this.description, this.imgurl});
+  PCComponent({this.manufacturer, this.name, this.description, this.imgurl});
 }

@@ -3,9 +3,13 @@ import 'package:flutter/rendering.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 
-class PCComponent extends StatelessWidget {
-  final PCComponentModel component;
-  const PCComponent({Key key, @required this.component}) : super(key: key);
+typedef OnComponentAdd(PCComponent component);
+
+class PCComponentWidget extends StatelessWidget {
+  final PCComponent component;
+  final OnComponentAdd onAdd;
+  PCComponentWidget({Key key, @required this.component, this.onAdd})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +78,9 @@ class PCComponent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(kRadius)),
                   fillColor: kLoginButtonColor,
                   child: Icon(Icons.add),
-                  onPressed: () {},
+                  onPressed: () {
+                    onAdd(component);
+                  },
                 )
               ],
             ),
