@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
@@ -12,6 +13,9 @@ class PCComponentWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    CachedNetworkImageProvider imgC = CachedNetworkImageProvider(
+      component.imgurl,
+    );
     NetworkImage img = NetworkImage(component.imgurl);
     img.evict();
     return Container(
@@ -37,7 +41,7 @@ class PCComponentWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image(
-                  image: img,
+                  image: imgC,
                   width: 100,
                   height: 100,
                 ),

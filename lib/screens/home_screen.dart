@@ -149,27 +149,24 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
-          PageView(
-            onPageChanged: (index) {
-              setState(() {
-                _index = index;
-              });
-            },
-            controller: _pageController,
-            pageSnapping: true,
-            children: <Widget>[
-              _components.length > 0
-                  ? RefreshIndicator(
-                      color: kLoginButtonColor,
-                      onRefresh: () async {
-                        getData();
-                      },
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(accentColor: kLoginButtonColor),
+          Theme(
+            data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
+            child: PageView(
+              onPageChanged: (index) {
+                setState(() {
+                  _index = index;
+                });
+              },
+              controller: _pageController,
+              pageSnapping: true,
+              children: <Widget>[
+                _components.length > 0
+                    ? RefreshIndicator(
+                        color: kLoginButtonColor,
+                        onRefresh: () async {
+                          getData();
+                        },
                         child: ListView.builder(
-                          addAutomaticKeepAlives: true,
-                          key: UniqueKey(),
                           itemCount: _components.length,
                           itemBuilder: (context, index) {
                             if (index == 0) {
@@ -207,45 +204,45 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                      ),
-                    )
-                  : Center(
-                      child: TyperAnimatedTextKit(
-                        text: ["Loading"],
-                        duration: Duration(milliseconds: 600),
-                        textStyle: loadingAnimationStyle,
-                      ),
-                    ),
-              _components.length > 0
-                  ? RefreshIndicator(
-                      color: kLoginButtonColor,
-                      onRefresh: () async {
-                        getData();
-                      },
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(accentColor: kLoginButtonColor),
-                        child: ListView.builder(
-                          itemCount: _components.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: PCComponentWidget(
-                                component: _components[index],
-                              ),
-                            );
-                          },
+                      )
+                    : Center(
+                        child: TyperAnimatedTextKit(
+                          text: ["Loading"],
+                          duration: Duration(milliseconds: 600),
+                          textStyle: loadingAnimationStyle,
                         ),
                       ),
-                    )
-                  : Center(
-                      child: TyperAnimatedTextKit(
-                        text: ["Loading"],
-                        duration: Duration(milliseconds: 600),
-                        textStyle: loadingAnimationStyle,
+                _components.length > 0
+                    ? RefreshIndicator(
+                        color: kLoginButtonColor,
+                        onRefresh: () async {
+                          getData();
+                        },
+                        child: Theme(
+                          data: Theme.of(context)
+                              .copyWith(accentColor: kLoginButtonColor),
+                          child: ListView.builder(
+                            itemCount: _components.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                child: PCComponentWidget(
+                                  component: _components[index],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: TyperAnimatedTextKit(
+                          text: ["Loading"],
+                          duration: Duration(milliseconds: 600),
+                          textStyle: loadingAnimationStyle,
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
 
           //---------------------------------------------BOTTOM NAVBAR---------------------------------------------
