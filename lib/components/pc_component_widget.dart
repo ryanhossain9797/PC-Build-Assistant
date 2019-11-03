@@ -10,9 +10,10 @@ class PCComponentWidget extends StatelessWidget {
   final OnComponentAdd onAdd;
   PCComponentWidget({Key key, @required this.component, this.onAdd})
       : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    NetworkImage img = NetworkImage(component.imgurl);
+    img.evict();
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.symmetric(vertical: 5),
@@ -35,8 +36,8 @@ class PCComponentWidget extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Image.network(
-                  component.imgurl,
+                Image(
+                  image: img,
                   width: 100,
                   height: 100,
                 ),

@@ -76,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
     print("called getdata");
     List<PCComponent> tempComponents = await DatabaseHelper.getData();
     setState(() {
-      _components = tempComponents;
+      _components.clear();
+      _components.addAll(tempComponents);
     });
   }
 
@@ -167,6 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         data: Theme.of(context)
                             .copyWith(accentColor: kLoginButtonColor),
                         child: ListView.builder(
+                          addAutomaticKeepAlives: true,
+                          key: UniqueKey(),
                           itemCount: _components.length,
                           itemBuilder: (context, index) {
                             if (index == 0) {
@@ -174,6 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 margin: EdgeInsets.only(
                                     left: 10, right: 10, top: 30),
                                 child: PCComponentWidget(
+                                  key: UniqueKey(),
                                   component: _components[index],
                                   onAdd: (currentComponent) {
                                     BuildManager.addComponent(currentComponent);
