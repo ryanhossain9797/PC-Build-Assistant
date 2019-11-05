@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
+import 'package:pc_build_assistant/components/build_component_widget.dart';
 import 'package:pc_build_assistant/components/pc_component_widget.dart';
 import 'package:pc_build_assistant/components/tab_button_widget.dart';
 import 'package:pc_build_assistant/components/tab_slider_widget.dart';
@@ -221,16 +222,89 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Theme(
                           data: Theme.of(context)
                               .copyWith(accentColor: kLoginButtonColor),
-                          child: ListView.builder(
-                            itemCount: _components.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                child: PCComponentWidget(
-                                  component: _components[index],
-                                ),
-                              );
-                            },
+                          child: ListView(
+                            children: <Widget>[
+                              BuildManager.build.chassis != null
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BuildComponentWidget(
+                                        title: "Chassis",
+                                        component: BuildManager.build.chassis,
+                                        onRemove: (removeComponent) {
+                                          setState(() {
+                                            BuildManager.build.chassis = null;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              BuildManager.build.motherboard != null
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BuildComponentWidget(
+                                        title: "Motherboard",
+                                        component:
+                                            BuildManager.build.motherboard,
+                                        onRemove: (removeComponent) {
+                                          setState(() {
+                                            BuildManager.build.motherboard =
+                                                null;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              BuildManager.build.processor != null
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BuildComponentWidget(
+                                        title: "Processor",
+                                        component: BuildManager.build.processor,
+                                        onRemove: (removeComponent) {
+                                          setState(() {
+                                            BuildManager.build.processor = null;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              BuildManager.build.gpu != null
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BuildComponentWidget(
+                                        title: "Graphics Card",
+                                        component: BuildManager.build.gpu,
+                                        onRemove: (removeComponent) {
+                                          setState(() {
+                                            BuildManager.build.gpu = null;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              BuildManager.build.psu != null
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BuildComponentWidget(
+                                        title: "Power Supply",
+                                        component: BuildManager.build.psu,
+                                        onRemove: (removeComponent) {
+                                          setState(() {
+                                            BuildManager.build.psu = null;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              Container(
+                                height: 50,
+                              ),
+                            ],
                           ),
                         ),
                       )

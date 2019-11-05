@@ -4,12 +4,14 @@ import 'package:flutter/rendering.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 
-typedef OnComponentAdd(PCComponent component);
+typedef OnComponentRemove(PCComponent component);
 
-class PCComponentWidget extends StatelessWidget {
+class BuildComponentWidget extends StatelessWidget {
   final PCComponent component;
-  final OnComponentAdd onAdd;
-  PCComponentWidget({Key key, @required this.component, this.onAdd})
+  final OnComponentRemove onRemove;
+  final String title;
+  BuildComponentWidget(
+      {Key key, @required this.component, this.title = "Title", this.onRemove})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,15 @@ class PCComponentWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Center(
+                child: Text(
+                  title,
+                  style: kAnimatedTextStyle,
+                ),
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -78,10 +89,10 @@ class PCComponentWidget extends StatelessWidget {
                 RawMaterialButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(kRadius)),
-                  fillColor: kLoginButtonColor,
-                  child: Icon(Icons.add),
+                  fillColor: kRedButtonColor,
+                  child: Icon(Icons.close),
                   onPressed: () {
-                    onAdd(component);
+                    onRemove(component);
                   },
                 )
               ],

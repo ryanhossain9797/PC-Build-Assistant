@@ -59,6 +59,7 @@ const InputDecoration kRegisterTextFieldDecoration = InputDecoration(
 );
 
 const kAnimatedTextStyle = TextStyle(
+  letterSpacing: 1,
   color: Colors.white,
   fontSize: 24.0,
   fontWeight: FontWeight.w900,
