@@ -11,7 +11,10 @@ class BuildComponentWidget extends StatelessWidget {
   final OnComponentRemove onRemove;
   final String title;
   BuildComponentWidget(
-      {Key key, @required this.component, this.title = "Title", this.onRemove})
+      {Key key,
+      @required this.component,
+      this.title = "Title",
+      @required this.onRemove})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

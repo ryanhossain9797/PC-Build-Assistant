@@ -338,7 +338,7 @@ class _ComponentPageState extends State<ComponentPage> {
   }
 }
 
-//----------------------------------------------------------------BUILD PAGE-----------------------------------------------------------------
+//------------------------------------------------------------------BUILD PAGE------------------------------------------------------------------
 class BuildPage extends StatefulWidget {
   final Refresh onRefresh;
   BuildPage({this.onRefresh});
@@ -405,7 +405,7 @@ class _BuildPageState extends State<BuildPage> {
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: BuildComponentWidget(
-                      title: "Graphics Card",
+                      title: "Graphics  Card",
                       component: BuildManager.build.gpu,
                       onRemove: (removeComponent) {
                         setState(() {
@@ -439,100 +439,44 @@ class _BuildPageState extends State<BuildPage> {
   }
 }
 
-//class BuildPage extends StatefulWidget {
-//  final Refresh onRefresh;
-//  BuildPage({this.onRefresh});
-//
-//  @override
-//  _BuildPageState createState() => _BuildPageState();
-//}
-//
-//class _BuildPageState extends State<BuildPage> {
-//  @override
-//  Widget build(BuildContext context) {
-//    return RefreshIndicator(
-//      color: kLoginButtonColor,
-//      onRefresh: () async {
-//        widget.onRefresh();
-//      },
-//      child: Theme(
-//        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
-//        child: ListView(
-//          children: <Widget>[
-//            BuildManager.build.chassis != null
-//                ? Container(
-//              margin: EdgeInsets.symmetric(horizontal: 10),
-//              child: BuildComponentWidget(
-//                title: "Chassis",
-//                component: BuildManager.build.chassis,
-//                onRemove: (removeComponent) {
-//                  setState(() {
-//                    BuildManager.build.chassis = null;
-//                  });
-//                },
-//              ),
-//            )
-//                : Container(),
-//            BuildManager.build.motherboard != null
-//                ? Container(
-//              margin: EdgeInsets.symmetric(horizontal: 10),
-//              child: BuildComponentWidget(
-//                title: "Motherboard",
-//                component: BuildManager.build.motherboard,
-//                onRemove: (removeComponent) {
-//                  setState(() {
-//                    BuildManager.build.motherboard = null;
-//                  });
-//                },
-//              ),
-//            )
-//                : Container(),
-//            BuildManager.build.processor != null
-//                ? Container(
-//              margin: EdgeInsets.symmetric(horizontal: 10),
-//              child: BuildComponentWidget(
-//                title: "Processor",
-//                component: BuildManager.build.processor,
-//                onRemove: (removeComponent) {
-//                  setState(() {
-//                    BuildManager.build.processor = null;
-//                  });
-//                },
-//              ),
-//            )
-//                : Container(),
-//            BuildManager.build.gpu != null
-//                ? Container(
-//              margin: EdgeInsets.symmetric(horizontal: 10),
-//              child: BuildComponentWidget(
-//                component: BuildManager.build.gpu,
-//                onRemove: (removeComponent) {
-//                  setState(() {
-//                    BuildManager.build.gpu = null;
-//                  });
-//                },
-//              ),
-//            )
-//                : Container(),
-//            BuildManager.build.psu != null
-//                ? Container(
-//              margin: EdgeInsets.symmetric(horizontal: 10),
-//              child: BuildComponentWidget(
-//                component: BuildManager.build.psu,
-//                onRemove: (removeComponent) {
-//                  setState(() {
-//                    BuildManager.build.psu = null;
-//                  });
-//                },
-//              ),
-//            )
-//                : Container(),
-//            Container(
-//              height: 50,
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}
+//-----------------------------------------------------------BUILD PAGE ANIMATED-------------------------------------------------------------
+class BuildPageAnimated extends StatefulWidget {
+  final Refresh onRefresh;
+  BuildPageAnimated({this.onRefresh});
+
+  @override
+  _BuildPageAnimatedState createState() => _BuildPageAnimatedState();
+}
+
+class _BuildPageAnimatedState extends State<BuildPageAnimated> {
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: kLoginButtonColor,
+      onRefresh: () async {
+        widget.onRefresh();
+      },
+      child: Theme(
+        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
+        child: AnimatedList(
+          initialItemCount: 5,
+          itemBuilder: (context, itemNumber, animation) {
+            if (itemNumber == 0 && BuildManager.build.processor != null) {
+              return SlideTransition(
+                child: BuildComponentWidget(
+                  component: BuildManager.build.processor,
+                  onRemove: (PCComponent removeComponent) {
+                    BuildManager.removeComponent(removeComponent);
+                    AnimatedList.of(context)
+                        .removeItem(itemNumber, (context, animation) {});
+                  },
+                ),
+              );
+            }
+            return null;
+          },
+        ),
+      ),
+    );
+  }
+}
