@@ -314,22 +314,30 @@ class _ComponentPageState extends State<ComponentPage> {
         widget.onRefresh();
       },
       child: ListView.builder(
-        itemCount: components.length,
+        itemCount: components.length + 2,
         itemBuilder: (context, index) {
           double top = 5;
           double bottom = 5;
-          if (index == 0) top += 30;
-          if (index == components.length - 1) bottom += kNavBarHeight;
-          return Container(
-            margin:
-                EdgeInsets.only(left: 10, right: 10, top: top, bottom: bottom),
-            child: PCComponentWidget(
-              component: components[index],
-              onAdd: (currentComponent) {
-                BuildManager.addComponent(currentComponent);
-              },
-            ),
-          );
+          if (index == 0) {
+            return Container(
+              height: 30,
+            );
+          } else if (index == components.length + 1) {
+            return Container(
+              height: kNavBarHeight,
+            );
+          } else {
+            return Container(
+              margin: EdgeInsets.only(
+                  left: 10, right: 10, top: top, bottom: bottom),
+              child: PCComponentWidget(
+                component: components[index - 1],
+                onAdd: (currentComponent) {
+                  BuildManager.addComponent(currentComponent);
+                },
+              ),
+            );
+          }
         },
       ),
     );
@@ -356,42 +364,51 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
       child: Theme(
         data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
         child: AnimatedList(
-          initialItemCount: BuildManager.getItemCount(),
+          initialItemCount: BuildManager.getItemCount() + 2,
           itemBuilder: (context, itemNumber, animation) {
-            PCComponent component = BuildManager.getItem(itemNumber);
-            double top = 5;
-            double bottom = 5;
-            if (itemNumber == BuildManager.getItemCount() - 1) bottom += 50;
-            return Container(
-              margin: EdgeInsets.only(
-                  left: 10, right: 10, top: top, bottom: bottom),
-              child: BuildComponentWidget(
-                title: PCComponent.getTitle(component),
-                component: component,
-                onRemove: (PCComponent removeComponent) {
-                  BuildManager.removeComponent(removeComponent);
-                  AnimatedList.of(context).removeItem(
-                    itemNumber,
-                    (context, animation) {
-                      BuildManager.removeComponent(removeComponent);
-                      return FadeTransition(
-                        opacity: animation.drive(
-                          Tween(begin: 0, end: 1),
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              left: 10, right: 10, top: top, bottom: bottom),
-                          child: BuildComponentWidget(
-                            component: removeComponent,
-                            title: PCComponent.getTitle(component),
+            if (itemNumber == 0) {
+              return Container(
+                height: 30,
+              );
+            } else if (itemNumber == BuildManager.getItemCount() + 1) {
+              return Container(
+                height: kNavBarHeight,
+              );
+            } else {
+              PCComponent component = BuildManager.getItem(itemNumber - 1);
+              double top = 5;
+              double bottom = 5;
+              return Container(
+                margin: EdgeInsets.only(
+                    left: 10, right: 10, top: top, bottom: bottom),
+                child: BuildComponentWidget(
+                  title: PCComponent.getTitle(component),
+                  component: component,
+                  onRemove: (PCComponent removeComponent) {
+                    BuildManager.removeComponent(removeComponent);
+                    AnimatedList.of(context).removeItem(
+                      itemNumber,
+                      (context, animation) {
+                        BuildManager.removeComponent(removeComponent);
+                        return FadeTransition(
+                          opacity: animation.drive(
+                            Tween(begin: 0, end: 1),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            );
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 10, right: 10, top: top, bottom: bottom),
+                            child: BuildComponentWidget(
+                              component: removeComponent,
+                              title: PCComponent.getTitle(component),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              );
+            }
           },
         ),
       ),
