@@ -162,49 +162,11 @@ class _HomeScreenState extends State<HomeScreen> {
               pageSnapping: true,
               children: <Widget>[
                 _components.length > 0
-                    ? RefreshIndicator(
-                        color: kLoginButtonColor,
-                        onRefresh: () async {
+                    ? ComponentPage(
+                        onRefresh: () {
                           getData();
                         },
-                        child: ListView.builder(
-                          itemCount: _components.length,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Container(
-                                margin: EdgeInsets.only(
-                                    left: 10, right: 10, top: 30),
-                                child: PCComponentWidget(
-                                  key: UniqueKey(),
-                                  component: _components[index],
-                                  onAdd: (currentComponent) {
-                                    BuildManager.addComponent(currentComponent);
-                                  },
-                                ),
-                              );
-                            } else if (index == _components.length - 1) {
-                              return Container(
-                                margin: EdgeInsets.only(
-                                    left: 10, right: 10, bottom: 50),
-                                child: PCComponentWidget(
-                                  component: _components[index],
-                                  onAdd: (currentComponent) {
-                                    BuildManager.addComponent(currentComponent);
-                                  },
-                                ),
-                              );
-                            }
-                            return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: PCComponentWidget(
-                                component: _components[index],
-                                onAdd: (currentComponent) {
-                                  BuildManager.addComponent(currentComponent);
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                        components: _components,
                       )
                     : Center(
                         child: TyperAnimatedTextKit(
@@ -213,108 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           textStyle: loadingAnimationStyle,
                         ),
                       ),
-                _components.length > 0
-                    ? RefreshIndicator(
-                        color: kLoginButtonColor,
-                        onRefresh: () async {
-                          getData();
-                        },
-                        child: Theme(
-                          data: Theme.of(context)
-                              .copyWith(accentColor: kLoginButtonColor),
-                          child: ListView(
-                            children: <Widget>[
-                              BuildManager.build.chassis != null
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BuildComponentWidget(
-                                        title: "Chassis",
-                                        component: BuildManager.build.chassis,
-                                        onRemove: (removeComponent) {
-                                          setState(() {
-                                            BuildManager.build.chassis = null;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              BuildManager.build.motherboard != null
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BuildComponentWidget(
-                                        title: "Motherboard",
-                                        component:
-                                            BuildManager.build.motherboard,
-                                        onRemove: (removeComponent) {
-                                          setState(() {
-                                            BuildManager.build.motherboard =
-                                                null;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              BuildManager.build.processor != null
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BuildComponentWidget(
-                                        title: "Processor",
-                                        component: BuildManager.build.processor,
-                                        onRemove: (removeComponent) {
-                                          setState(() {
-                                            BuildManager.build.processor = null;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              BuildManager.build.gpu != null
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BuildComponentWidget(
-                                        title: "Graphics Card",
-                                        component: BuildManager.build.gpu,
-                                        onRemove: (removeComponent) {
-                                          setState(() {
-                                            BuildManager.build.gpu = null;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              BuildManager.build.psu != null
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BuildComponentWidget(
-                                        title: "Power Supply",
-                                        component: BuildManager.build.psu,
-                                        onRemove: (removeComponent) {
-                                          setState(() {
-                                            BuildManager.build.psu = null;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              Container(
-                                height: 50,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Center(
-                        child: TyperAnimatedTextKit(
-                          text: ["Loading"],
-                          duration: Duration(milliseconds: 600),
-                          textStyle: loadingAnimationStyle,
-                        ),
-                      ),
+                BuildPage(
+                  onRefresh: () {
+                    getData();
+                  },
+                ),
               ],
             ),
           ),
@@ -325,10 +190,11 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 30,
-                    spreadRadius: 20,
-                    color: kNavShadowColor,
-                    offset: Offset(0, 10))
+                  blurRadius: 30,
+                  spreadRadius: 20,
+                  color: kNavShadowColor,
+                  offset: Offset(0, 10),
+                ),
               ],
             ),
             height: 50,
@@ -408,3 +274,263 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+//---------------------------------------------------------------PAGES--------------------------------------------------------------
+typedef Refresh();
+
+//----------------------------------------------------------COMPONENTS PAGE---------------------------------------------------------
+class ComponentPage extends StatefulWidget {
+  final Refresh onRefresh;
+  final List<PCComponent> components;
+
+  ComponentPage({this.onRefresh, this.components});
+
+  @override
+  _ComponentPageState createState() => _ComponentPageState();
+}
+
+class _ComponentPageState extends State<ComponentPage> {
+  @override
+  Widget build(BuildContext context) {
+    var components = widget.components;
+    return RefreshIndicator(
+      color: kLoginButtonColor,
+      onRefresh: () async {
+        widget.onRefresh();
+      },
+      child: ListView.builder(
+        itemCount: components.length,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 30),
+              child: PCComponentWidget(
+                key: UniqueKey(),
+                component: components[index],
+                onAdd: (currentComponent) {
+                  BuildManager.addComponent(currentComponent);
+                },
+              ),
+            );
+          } else if (index == components.length - 1) {
+            return Container(
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 50),
+              child: PCComponentWidget(
+                component: components[index],
+                onAdd: (currentComponent) {
+                  BuildManager.addComponent(currentComponent);
+                },
+              ),
+            );
+          }
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: PCComponentWidget(
+              component: components[index],
+              onAdd: (currentComponent) {
+                BuildManager.addComponent(currentComponent);
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+//----------------------------------------------------------------BUILD PAGE-----------------------------------------------------------------
+class BuildPage extends StatefulWidget {
+  final Refresh onRefresh;
+  BuildPage({this.onRefresh});
+
+  @override
+  _BuildPageState createState() => _BuildPageState();
+}
+
+class _BuildPageState extends State<BuildPage> {
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: kLoginButtonColor,
+      onRefresh: () async {
+        widget.onRefresh();
+      },
+      child: Theme(
+        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
+        child: ListView(
+          children: <Widget>[
+            BuildManager.build.chassis != null
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: BuildComponentWidget(
+                      title: "Chassis",
+                      component: BuildManager.build.chassis,
+                      onRemove: (removeComponent) {
+                        setState(() {
+                          BuildManager.build.chassis = null;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
+            BuildManager.build.motherboard != null
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: BuildComponentWidget(
+                      title: "Motherboard",
+                      component: BuildManager.build.motherboard,
+                      onRemove: (removeComponent) {
+                        setState(() {
+                          BuildManager.build.motherboard = null;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
+            BuildManager.build.processor != null
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: BuildComponentWidget(
+                      title: "Processor",
+                      component: BuildManager.build.processor,
+                      onRemove: (removeComponent) {
+                        setState(() {
+                          BuildManager.build.processor = null;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
+            BuildManager.build.gpu != null
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: BuildComponentWidget(
+                      component: BuildManager.build.gpu,
+                      onRemove: (removeComponent) {
+                        setState(() {
+                          BuildManager.build.gpu = null;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
+            BuildManager.build.psu != null
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: BuildComponentWidget(
+                      component: BuildManager.build.psu,
+                      onRemove: (removeComponent) {
+                        setState(() {
+                          BuildManager.build.psu = null;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
+            Container(
+              height: 50,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//class BuildPage extends StatefulWidget {
+//  final Refresh onRefresh;
+//  BuildPage({this.onRefresh});
+//
+//  @override
+//  _BuildPageState createState() => _BuildPageState();
+//}
+//
+//class _BuildPageState extends State<BuildPage> {
+//  @override
+//  Widget build(BuildContext context) {
+//    return RefreshIndicator(
+//      color: kLoginButtonColor,
+//      onRefresh: () async {
+//        widget.onRefresh();
+//      },
+//      child: Theme(
+//        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
+//        child: ListView(
+//          children: <Widget>[
+//            BuildManager.build.chassis != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Chassis",
+//                component: BuildManager.build.chassis,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.chassis = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.motherboard != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Motherboard",
+//                component: BuildManager.build.motherboard,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.motherboard = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.processor != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Processor",
+//                component: BuildManager.build.processor,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.processor = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.gpu != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                component: BuildManager.build.gpu,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.gpu = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.psu != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                component: BuildManager.build.psu,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.psu = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            Container(
+//              height: 50,
+//            ),
+//          ],
+//        ),
+//      ),
+//    );
+//  }
+//}
