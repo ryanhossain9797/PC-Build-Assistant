@@ -11,10 +11,7 @@ class BuildComponentWidget extends StatelessWidget {
   final OnComponentRemove onRemove;
   final String title;
   BuildComponentWidget(
-      {Key key,
-      @required this.component,
-      this.title = "Title",
-      @required this.onRemove})
+      {Key key, @required this.component, this.title = "Title", this.onRemove})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,7 +20,6 @@ class BuildComponentWidget extends StatelessWidget {
     );
     return Container(
         padding: EdgeInsets.all(10),
-        margin: EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           color: kComponentBoxColor,
           boxShadow: [
@@ -95,7 +91,9 @@ class BuildComponentWidget extends StatelessWidget {
                   fillColor: kRedButtonColor,
                   child: Icon(Icons.close),
                   onPressed: () {
-                    onRemove(component);
+                    if (onRemove != null) {
+                      onRemove(component);
+                    }
                   },
                 )
               ],

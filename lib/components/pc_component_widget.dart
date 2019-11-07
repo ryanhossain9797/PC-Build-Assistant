@@ -18,7 +18,6 @@ class PCComponentWidget extends StatelessWidget {
     );
     return Container(
         padding: EdgeInsets.all(10),
-        margin: EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           color: kComponentBoxColor,
           boxShadow: [

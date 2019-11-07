@@ -301,30 +301,13 @@ class _ComponentPageState extends State<ComponentPage> {
       child: ListView.builder(
         itemCount: components.length,
         itemBuilder: (context, index) {
-          if (index == 0) {
-            return Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 30),
-              child: PCComponentWidget(
-                key: UniqueKey(),
-                component: components[index],
-                onAdd: (currentComponent) {
-                  BuildManager.addComponent(currentComponent);
-                },
-              ),
-            );
-          } else if (index == components.length - 1) {
-            return Container(
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 50),
-              child: PCComponentWidget(
-                component: components[index],
-                onAdd: (currentComponent) {
-                  BuildManager.addComponent(currentComponent);
-                },
-              ),
-            );
-          }
+          double top = 5;
+          double bottom = 5;
+          if (index == 0) top += 30;
+          if (index == components.length - 1) bottom += 50;
           return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
+            margin:
+                EdgeInsets.only(left: 10, right: 10, top: top, bottom: bottom),
             child: PCComponentWidget(
               component: components[index],
               onAdd: (currentComponent) {
@@ -462,30 +445,38 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
           initialItemCount: BuildManager.getItemCount(),
           itemBuilder: (context, itemNumber, animation) {
             PCComponent component = BuildManager.getItem(itemNumber);
-            return BuildComponentWidget(
-              title: PCComponent.getTitle(component),
-              component: component,
-              onRemove: (PCComponent removeComponent) {
-                BuildManager.removeComponent(removeComponent);
-                AnimatedList.of(context).removeItem(
-                  itemNumber,
-                  (context, animation) {
-                    BuildManager.removeComponent(removeComponent);
-                    return FadeTransition(
-                      opacity: animation.drive(
-                        Tween(begin: 0, end: 1),
-                      ),
-                      child: Container(
-                        child: BuildComponentWidget(
-                          component: removeComponent,
-                          title: PCComponent.getTitle(component),
-                          onRemove: (removed) {},
+            double top = 5;
+            double bottom = 5;
+            if (itemNumber == BuildManager.getItemCount() - 1) bottom += 50;
+            return Container(
+              margin: EdgeInsets.only(
+                  left: 10, right: 10, top: top, bottom: bottom),
+              child: BuildComponentWidget(
+                title: PCComponent.getTitle(component),
+                component: component,
+                onRemove: (PCComponent removeComponent) {
+                  BuildManager.removeComponent(removeComponent);
+                  AnimatedList.of(context).removeItem(
+                    itemNumber,
+                    (context, animation) {
+                      BuildManager.removeComponent(removeComponent);
+                      return FadeTransition(
+                        opacity: animation.drive(
+                          Tween(begin: 0, end: 1),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: 10, right: 10, top: top, bottom: bottom),
+                          child: BuildComponentWidget(
+                            component: removeComponent,
+                            title: PCComponent.getTitle(component),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         ),
