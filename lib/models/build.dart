@@ -15,6 +15,6 @@ class Build {
 
   @override
   String toString() {
-    return "$chassis $motherboard $processor $gpu $psu";
+    return "$chassis, $motherboard, $processor, $gpu, $psu";
   }
 }

@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           textStyle: loadingAnimationStyle,
                         ),
                       ),
-                BuildPage(
+                BuildPageAnimated(
                   onRefresh: () {
                     getData();
                   },
@@ -459,21 +459,34 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
       child: Theme(
         data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
         child: AnimatedList(
-          initialItemCount: 5,
+          initialItemCount: BuildManager.getItemCount(),
           itemBuilder: (context, itemNumber, animation) {
-            if (itemNumber == 0 && BuildManager.build.processor != null) {
-              return SlideTransition(
-                child: BuildComponentWidget(
-                  component: BuildManager.build.processor,
-                  onRemove: (PCComponent removeComponent) {
+            PCComponent component = BuildManager.getItem(itemNumber);
+            return BuildComponentWidget(
+              title: PCComponent.getTitle(component),
+              component: component,
+              onRemove: (PCComponent removeComponent) {
+                BuildManager.removeComponent(removeComponent);
+                AnimatedList.of(context).removeItem(
+                  itemNumber,
+                  (context, animation) {
                     BuildManager.removeComponent(removeComponent);
-                    AnimatedList.of(context)
-                        .removeItem(itemNumber, (context, animation) {});
+                    return FadeTransition(
+                      opacity: animation.drive(
+                        Tween(begin: 0, end: 1),
+                      ),
+                      child: Container(
+                        child: BuildComponentWidget(
+                          component: removeComponent,
+                          title: PCComponent.getTitle(component),
+                          onRemove: (removed) {},
+                        ),
+                      ),
+                    );
                   },
-                ),
-              );
-            }
-            return null;
+                );
+              },
+            );
           },
         ),
       ),
