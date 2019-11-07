@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -197,76 +198,90 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            height: 50,
-            child: Stack(
-              children: <Widget>[
-                //----------------------------------TAB BUTTON------------------------------------------------------
-                AnimatedAlign(
-                  curve: Curves.decelerate,
-                  duration: kAnimationDuration,
-                  alignment: _index == 0
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  child: TabSlider(
-                    left: _index == 0 ? true : false,
-                    duration: kAnimationDuration,
-                    width: _tabWidth,
-                    height: _tabHeight,
-                    color: kTabSliderColor,
+            height: kNavBarHeight,
+            child: AnimatedContainer(
+              duration: kButtonAnimationDuration,
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    width: 2,
+                    color:
+                        _index == 0 ? kLoginButtonColor : kRegisterButtonColor),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(kRadius),
+                ),
+              ),
+              child: Stack(
+                children: <Widget>[
+                  //----------------------------------TAB BUTTON------------------------------------------------------
+                  AnimatedAlign(
+                    curve: Curves.decelerate,
+                    duration: kSlideAnimationDuration,
+                    alignment: _index == 0
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
+                    child: TabSlider(
+                      left: _index == 0 ? true : false,
+                      duration: kButtonAnimationDuration,
+                      width: _tabWidth,
+                      height: _tabHeight,
+                      colorLeft: kLoginButtonColor,
+                      colorRight: kRegisterButtonColor,
+                    ),
                   ),
-                ),
 
-                //-------------------------------------TOP ICONS------------------------------------------
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        child: TabButton(
-                          componentsKey: _componentsKey,
-                          selected: _index == 0 ? true : false,
-                          icon: FontAwesomeIcons.shoppingCart,
+                  //-------------------------------------TOP ICONS------------------------------------------
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          child: TabButton(
+                            componentsKey: _componentsKey,
+                            selected: _index == 0 ? true : false,
+                            icon: FontAwesomeIcons.shoppingCart,
+                          ),
+                          onTap: () {
+                            setState(
+                              () {
+                                _index = 0;
+                                _pageController.animateToPage(0,
+                                    duration: kButtonAnimationDuration,
+                                    curve: Curves.decelerate);
+                              },
+                            );
+                          },
                         ),
-                        onTap: () {
-                          setState(
-                            () {
-                              _index = 0;
-                              _pageController.animateToPage(0,
-                                  duration: kAnimationDuration,
-                                  curve: Curves.decelerate);
-                            },
-                          );
-                        },
                       ),
-                    ),
-                    Container(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        child: TabButton(
-                          componentsKey: _buildKey,
-                          selected: _index == 1 ? true : false,
-                          icon: FontAwesomeIcons.screwdriver,
+                      Container(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          child: TabButton(
+                            componentsKey: _buildKey,
+                            selected: _index == 1 ? true : false,
+                            icon: FontAwesomeIcons.screwdriver,
+                          ),
+                          onTap: () {
+                            setState(
+                              () {
+                                _index = 1;
+                                _pageController.animateToPage(1,
+                                    duration: kButtonAnimationDuration,
+                                    curve: Curves.decelerate);
+                              },
+                            );
+                          },
                         ),
-                        onTap: () {
-                          setState(
-                            () {
-                              _index = 1;
-                              _pageController.animateToPage(1,
-                                  duration: kAnimationDuration,
-                                  curve: Curves.decelerate);
-                            },
-                          );
-                        },
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -304,7 +319,7 @@ class _ComponentPageState extends State<ComponentPage> {
           double top = 5;
           double bottom = 5;
           if (index == 0) top += 30;
-          if (index == components.length - 1) bottom += 50;
+          if (index == components.length - 1) bottom += kNavBarHeight;
           return Container(
             margin:
                 EdgeInsets.only(left: 10, right: 10, top: top, bottom: bottom),
@@ -316,107 +331,6 @@ class _ComponentPageState extends State<ComponentPage> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-//------------------------------------------------------------------BUILD PAGE------------------------------------------------------------------
-class BuildPage extends StatefulWidget {
-  final Refresh onRefresh;
-  BuildPage({this.onRefresh});
-
-  @override
-  _BuildPageState createState() => _BuildPageState();
-}
-
-class _BuildPageState extends State<BuildPage> {
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: kLoginButtonColor,
-      onRefresh: () async {
-        widget.onRefresh();
-      },
-      child: Theme(
-        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
-        child: ListView(
-          children: <Widget>[
-            BuildManager.build.chassis != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: BuildComponentWidget(
-                      title: "Chassis",
-                      component: BuildManager.build.chassis,
-                      onRemove: (removeComponent) {
-                        setState(() {
-                          BuildManager.build.chassis = null;
-                        });
-                      },
-                    ),
-                  )
-                : Container(),
-            BuildManager.build.motherboard != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: BuildComponentWidget(
-                      title: "Motherboard",
-                      component: BuildManager.build.motherboard,
-                      onRemove: (removeComponent) {
-                        setState(() {
-                          BuildManager.build.motherboard = null;
-                        });
-                      },
-                    ),
-                  )
-                : Container(),
-            BuildManager.build.processor != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: BuildComponentWidget(
-                      title: "Processor",
-                      component: BuildManager.build.processor,
-                      onRemove: (removeComponent) {
-                        setState(() {
-                          BuildManager.build.processor = null;
-                        });
-                      },
-                    ),
-                  )
-                : Container(),
-            BuildManager.build.gpu != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: BuildComponentWidget(
-                      title: "Graphics  Card",
-                      component: BuildManager.build.gpu,
-                      onRemove: (removeComponent) {
-                        setState(() {
-                          BuildManager.build.gpu = null;
-                        });
-                      },
-                    ),
-                  )
-                : Container(),
-            BuildManager.build.psu != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: BuildComponentWidget(
-                      title: "Power Supply",
-                      component: BuildManager.build.psu,
-                      onRemove: (removeComponent) {
-                        setState(() {
-                          BuildManager.build.psu = null;
-                        });
-                      },
-                    ),
-                  )
-                : Container(),
-            Container(
-              height: 50,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -484,3 +398,104 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
     );
   }
 }
+
+//------------------------------------------------------------------BUILD PAGE------------------------------------------------------------------
+//class BuildPage extends StatefulWidget {
+//  final Refresh onRefresh;
+//  BuildPage({this.onRefresh});
+//
+//  @override
+//  _BuildPageState createState() => _BuildPageState();
+//}
+//
+//class _BuildPageState extends State<BuildPage> {
+//  @override
+//  Widget build(BuildContext context) {
+//    return RefreshIndicator(
+//      color: kLoginButtonColor,
+//      onRefresh: () async {
+//        widget.onRefresh();
+//      },
+//      child: Theme(
+//        data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
+//        child: ListView(
+//          children: <Widget>[
+//            BuildManager.build.chassis != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Chassis",
+//                component: BuildManager.build.chassis,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.chassis = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.motherboard != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Motherboard",
+//                component: BuildManager.build.motherboard,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.motherboard = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.processor != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Processor",
+//                component: BuildManager.build.processor,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.processor = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.gpu != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Graphics  Card",
+//                component: BuildManager.build.gpu,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.gpu = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            BuildManager.build.psu != null
+//                ? Container(
+//              margin: EdgeInsets.symmetric(horizontal: 10),
+//              child: BuildComponentWidget(
+//                title: "Power Supply",
+//                component: BuildManager.build.psu,
+//                onRemove: (removeComponent) {
+//                  setState(() {
+//                    BuildManager.build.psu = null;
+//                  });
+//                },
+//              ),
+//            )
+//                : Container(),
+//            Container(
+//              height: 50,
+//            ),
+//          ],
+//        ),
+//      ),
+//    );
+//  }
+//}
