@@ -405,6 +405,7 @@ class _BuildPageState extends State<BuildPage> {
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: BuildComponentWidget(
+                      title: "Graphics Card",
                       component: BuildManager.build.gpu,
                       onRemove: (removeComponent) {
                         setState(() {
@@ -418,6 +419,7 @@ class _BuildPageState extends State<BuildPage> {
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: BuildComponentWidget(
+                      title: "Power Supply",
                       component: BuildManager.build.psu,
                       onRemove: (removeComponent) {
                         setState(() {
