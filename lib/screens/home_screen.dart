@@ -376,11 +376,8 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
               );
             } else {
               PCComponent component = BuildManager.getItem(itemNumber - 1);
-              double top = 5;
-              double bottom = 5;
               return Container(
-                margin: EdgeInsets.only(
-                    left: 10, right: 10, top: top, bottom: bottom),
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: BuildComponentWidget(
                   title: PCComponent.getTitle(component),
                   component: component,
@@ -390,13 +387,11 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
                       itemNumber,
                       (context, animation) {
                         BuildManager.removeComponent(removeComponent);
-                        return FadeTransition(
-                          opacity: animation.drive(
-                            Tween(begin: 0, end: 1),
-                          ),
+                        return SizeTransition(
+                          sizeFactor: animation,
                           child: Container(
-                            margin: EdgeInsets.only(
-                                left: 10, right: 10, top: top, bottom: bottom),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
                             child: BuildComponentWidget(
                               component: removeComponent,
                               title: PCComponent.getTitle(component),

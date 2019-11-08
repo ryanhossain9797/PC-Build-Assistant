@@ -75,6 +75,7 @@ class PCComponentWidget extends StatelessWidget {
                   ),
                 ),
                 RawMaterialButton(
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(kRadius)),
                   fillColor: kLoginButtonColor,
