@@ -36,7 +36,7 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final UserScreenArguments _args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       floatingActionButton: _currentUser != null
@@ -78,7 +78,7 @@ class _UserScreenState extends State<UserScreen> {
                                 fileExtension: true,
                               ),
                             )
-                          : args.avatar),
+                          : _args.avatar),
                 ),
               ),
               Container(

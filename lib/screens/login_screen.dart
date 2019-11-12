@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:pc_build_assistant/arguments/login_screen_arguments.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
 import 'package:pc_build_assistant/screens/reset_screen.dart';
 import 'package:pc_build_assistant/screens/welcome_screen.dart';
@@ -42,6 +43,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final LoginScreenArguments _args =
+        ModalRoute.of(context).settings.arguments;
+    print(_args);
+    if (_args != null) {
+      setState(() {
+        _message = _args.message;
+      });
+    }
+
     return ModalProgressHUD(
       progressIndicator: TyperAnimatedTextKit(
         isRepeatingAnimation: false,
@@ -117,22 +127,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {
                         _busy = true;
                       });
-
                       try {
-                        final user = await _auth.signInWithEmailAndPassword(
-                            email: _email, password: _password);
-                        if (user != null) {
+                        final authResult =
+                            await _auth.signInWithEmailAndPassword(
+                                email: _email, password: _password);
+                        if (authResult != null) {
+                          FirebaseUser user =
+                              await FirebaseAuth.instance.currentUser();
+                          if (!user.isEmailVerified) {
+                            FirebaseAuth.instance.signOut();
+                            setState(() {
+                              _message = "You Must Verify Your Email";
+                            });
+                          } else {
+                            Navigator.popUntil(context, (route) {
+                              if (route.settings.name == WelcomeScreen.id) {
+                                Navigator.pushNamed(context, HomeScreen.id);
+                                return true;
+                              } else if (route.settings.name == HomeScreen.id) {
+                                return true;
+                              }
+                              return false;
+                            });
+                          }
                           setState(() {
                             _busy = false;
-                          });
-                          Navigator.popUntil(context, (route) {
-                            if (route.settings.name == WelcomeScreen.id) {
-                              Navigator.pushNamed(context, HomeScreen.id);
-                              return true;
-                            } else if (route.settings.name == HomeScreen.id) {
-                              return true;
-                            }
-                            return false;
                           });
                         }
                       } catch (e) {

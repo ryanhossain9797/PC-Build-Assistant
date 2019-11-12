@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:pc_build_assistant/arguments/login_screen_arguments.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
+import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 import 'package:pc_build_assistant/util/decoration.dart';
-
-import 'home_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = "/registrationScreenId";
@@ -144,10 +144,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               await _auth.createUserWithEmailAndPassword(
                                   email: _email, password: _password);
                           if (newUser != null) {
+                            FirebaseUser user = await _auth.currentUser();
+                            user.sendEmailVerification();
+                            _auth.signOut();
                             setState(() {
                               _busy = false;
                             });
-                            Navigator.pushNamed(context, HomeScreen.id);
+                            Navigator.popAndPushNamed(
+                              context,
+                              LoginScreen.id,
+                              arguments: LoginScreenArguments(
+                                  "Please Verify Your Email, Then Log In"),
+                            );
                           }
                         } catch (excp) {
                           print(excp.toString());
