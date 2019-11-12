@@ -135,9 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           FirebaseUser user =
                               await FirebaseAuth.instance.currentUser();
                           if (!user.isEmailVerified) {
+                            user.sendEmailVerification();
                             FirebaseAuth.instance.signOut();
                             setState(() {
-                              _message = "You Must Verify Your Email";
+                              _message =
+                                  "Verify Your Email, Verification Email Resent";
                             });
                           } else {
                             Navigator.popUntil(context, (route) {
