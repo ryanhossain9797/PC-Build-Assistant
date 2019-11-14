@@ -49,6 +49,7 @@ class DatabaseHelper {
                 name: item["name"],
                 description: item["description"],
                 imgurl: item["imgurl"],
+                size: item["size"],
               ),
             );
             break;
@@ -59,6 +60,7 @@ class DatabaseHelper {
                 name: item["name"],
                 description: item["description"],
                 imgurl: item["imgurl"],
+                size: item["size"],
               ),
             );
             break;

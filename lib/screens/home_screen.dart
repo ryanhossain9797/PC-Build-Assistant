@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             height: kNavBarHeight,
             child: AnimatedContainer(
-              duration: kButtonAnimationDuration,
+              duration: kAnimationDuration,
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 border: Border.all(
@@ -218,13 +218,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   //----------------------------------TAB BUTTON------------------------------------------------------
                   AnimatedAlign(
                     curve: Curves.decelerate,
-                    duration: kSlideAnimationDuration,
+                    duration: kAnimationDuration,
                     alignment: _index == 0
                         ? Alignment.centerLeft
                         : Alignment.centerRight,
                     child: TabSlider(
                       left: _index == 0 ? true : false,
-                      duration: kButtonAnimationDuration,
+                      duration: kAnimationDuration,
                       width: _tabWidth,
                       height: _tabHeight,
                       colorLeft: kLoginButtonColor,
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               () {
                                 _index = 0;
                                 _pageController.animateToPage(0,
-                                    duration: kButtonAnimationDuration,
+                                    duration: kAnimationDuration,
                                     curve: Curves.decelerate);
                               },
                             );
@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               () {
                                 _index = 1;
                                 _pageController.animateToPage(1,
-                                    duration: kButtonAnimationDuration,
+                                    duration: kAnimationDuration,
                                     curve: Curves.decelerate);
                               },
                             );
@@ -371,7 +371,13 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated>
   errorListBuilder(List<String> errors) {
     List<Widget> newErrorTexts = [];
     for (String error in errors) {
-      newErrorTexts.add(Text(error));
+      newErrorTexts.add(Container(
+        margin: EdgeInsets.all(5),
+        child: Text(
+          error,
+          style: TextStyle(color: kRedButtonColor),
+        ),
+      ));
     }
     setState(() {
       errorTexts = newErrorTexts;
@@ -402,13 +408,43 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated>
               margin: EdgeInsets.all(10),
             ),
             AnimatedSize(
-              duration: kButtonAnimationDuration,
+              duration: kAnimationDuration,
               vsync: this,
-              child: Container(
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  children: errorTexts,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(20),
+                    child: errorTexts.length == 0
+                        ? Icon(
+                            Icons.check,
+                            size: 50,
+                            color: kLoginButtonColor,
+                          )
+                        : Icon(
+                            Icons.error,
+                            size: 50,
+                            color: kRedButtonColor,
+                          ),
+                  ),
+                  Container(
+                    width: 200,
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: errorTexts.length > 0
+                          ? errorTexts
+                          : [
+                              Text(
+                                "Your Build is Okay",
+                                style: TextStyle(color: kLoginButtonColor),
+                              )
+                            ],
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(

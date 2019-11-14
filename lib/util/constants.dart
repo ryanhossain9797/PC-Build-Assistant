@@ -98,5 +98,4 @@ const kNavBarButtonShape = RoundedRectangleBorder(
   ),
 );
 
-const Duration kButtonAnimationDuration = Duration(milliseconds: 500);
-const Duration kSlideAnimationDuration = Duration(milliseconds: 800);
+const Duration kAnimationDuration = Duration(milliseconds: 500);

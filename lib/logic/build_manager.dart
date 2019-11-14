@@ -116,6 +116,10 @@ class BuildManager {
 
   static void _motherboardCheck() {
     if (build.motherboard != null) {
+      if (build.chassis != null &&
+          build.chassis.size < build.motherboard.size) {
+        errors.add("Your Chassis is too small for your Motherboard");
+      }
     } else {
       errors.add("You must add a Motherboard");
     }
