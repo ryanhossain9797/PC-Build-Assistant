@@ -7,12 +7,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
 import 'package:pc_build_assistant/components/build_component_widget.dart';
 import 'package:pc_build_assistant/components/pc_component_widget.dart';
+import 'package:pc_build_assistant/components/rounded_button_widget.dart';
 import 'package:pc_build_assistant/components/tab_button_widget.dart';
 import 'package:pc_build_assistant/components/tab_slider_widget.dart';
 import 'package:pc_build_assistant/logic/build_manager.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/screens/login_screen.dart';
 import 'package:pc_build_assistant/screens/user_screen.dart';
+import 'package:pc_build_assistant/screens/view_screen.dart';
 import 'package:pc_build_assistant/storage/database_helper.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 import 'package:pc_build_assistant/util/decoration.dart';
@@ -335,6 +337,9 @@ class _ComponentPageState extends State<ComponentPage> {
                 onAdd: (currentComponent) {
                   BuildManager.addComponent(currentComponent);
                 },
+                onView: (currentComponent) {
+                  Navigator.pushNamed(context, ViewScreen.id);
+                },
               ),
             );
           }
@@ -353,7 +358,26 @@ class BuildPageAnimated extends StatefulWidget {
   _BuildPageAnimatedState createState() => _BuildPageAnimatedState();
 }
 
-class _BuildPageAnimatedState extends State<BuildPageAnimated> {
+class _BuildPageAnimatedState extends State<BuildPageAnimated>
+    with TickerProviderStateMixin {
+  List<Widget> errorTexts = [];
+
+  @override
+  void initState() {
+    errorListBuilder(BuildManager.testBuild());
+    super.initState();
+  }
+
+  errorListBuilder(List<String> errors) {
+    List<Widget> newErrorTexts = [];
+    for (String error in errors) {
+      newErrorTexts.add(Text(error));
+    }
+    setState(() {
+      errorTexts = newErrorTexts;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -363,48 +387,78 @@ class _BuildPageAnimatedState extends State<BuildPageAnimated> {
       },
       child: Theme(
         data: Theme.of(context).copyWith(accentColor: kLoginButtonColor),
-        child: AnimatedList(
-          initialItemCount: BuildManager.getItemCount() + 2,
-          itemBuilder: (context, itemNumber, animation) {
-            if (itemNumber == 0) {
-              return Container(
-                height: 30,
-              );
-            } else if (itemNumber == BuildManager.getItemCount() + 1) {
-              return Container(
-                height: kNavBarHeight,
-              );
-            } else {
-              PCComponent component = BuildManager.getItem(itemNumber - 1);
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                child: BuildComponentWidget(
-                  title: PCComponent.getTitle(component),
-                  component: component,
-                  onRemove: (PCComponent removeComponent) {
-                    BuildManager.removeComponent(removeComponent);
-                    AnimatedList.of(context).removeItem(
-                      itemNumber,
-                      (context, animation) {
-                        BuildManager.removeComponent(removeComponent);
-                        return SizeTransition(
-                          sizeFactor: animation,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            child: BuildComponentWidget(
-                              component: removeComponent,
-                              title: PCComponent.getTitle(component),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              child: RoundedButton(
+                color: kLoginButtonColor,
+                title: "Check Build",
+                onPressed: () {
+                  List<String> errors = BuildManager.testBuild();
+                  errorListBuilder(errors);
+                },
+              ),
+              margin: EdgeInsets.all(10),
+            ),
+            AnimatedSize(
+              duration: kButtonAnimationDuration,
+              vsync: this,
+              child: Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: errorTexts,
                 ),
-              );
-            }
-          },
+              ),
+            ),
+            Expanded(
+              child: AnimatedList(
+                initialItemCount: BuildManager.getItemCount() + 2,
+                itemBuilder: (context, itemNumber, animation) {
+                  if (itemNumber == 0) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                    );
+                  } else if (itemNumber == BuildManager.getItemCount() + 1) {
+                    return Container(
+                      height: kNavBarHeight,
+                    );
+                  } else {
+                    PCComponent component =
+                        BuildManager.getItem(itemNumber - 1);
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: BuildComponentWidget(
+                        title: PCComponent.getTitle(component),
+                        component: component,
+                        onRemove: (PCComponent removeComponent) {
+                          BuildManager.removeComponent(removeComponent);
+                          errorListBuilder(BuildManager.testBuild());
+                          AnimatedList.of(context).removeItem(
+                            itemNumber,
+                            (context, animation) {
+                              BuildManager.removeComponent(removeComponent);
+                              return SizeTransition(
+                                sizeFactor: animation,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  child: BuildComponentWidget(
+                                    component: removeComponent,
+                                    title: PCComponent.getTitle(component),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

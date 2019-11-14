@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pc_build_assistant/arguments/user_screen_arguments.dart';
 import 'package:pc_build_assistant/components/rounded_button_widget.dart';
-import 'package:pc_build_assistant/screens/add_component.dart';
+import 'package:pc_build_assistant/screens/add_component_screen.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 import 'package:simple_gravatar/simple_gravatar.dart';
 

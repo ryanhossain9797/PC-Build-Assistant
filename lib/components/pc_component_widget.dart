@@ -4,12 +4,14 @@ import 'package:flutter/rendering.dart';
 import 'package:pc_build_assistant/models/pc_component.dart';
 import 'package:pc_build_assistant/util/constants.dart';
 
-typedef OnComponentAdd(PCComponent component);
+typedef OnComponentSelected(PCComponent component);
 
 class PCComponentWidget extends StatelessWidget {
   final PCComponent component;
-  final OnComponentAdd onAdd;
-  PCComponentWidget({Key key, @required this.component, this.onAdd})
+  final OnComponentSelected onAdd;
+  final OnComponentSelected onView;
+  PCComponentWidget(
+      {Key key, @required this.component, this.onAdd, this.onView})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -74,16 +76,39 @@ class PCComponentWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                RawMaterialButton(
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(kRadius)),
-                  fillColor: kLoginButtonColor,
-                  child: Icon(Icons.add),
-                  onPressed: () {
-                    onAdd(component);
-                  },
-                )
+                Row(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(kRadius),
+                        color: kLoginButtonColor,
+                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          onAdd(component);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(kRadius),
+                        color: kLoginButtonColor,
+                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.open_in_new),
+                        onPressed: () {
+                          onView(component);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

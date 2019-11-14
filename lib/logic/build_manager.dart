@@ -8,8 +8,18 @@ import 'package:pc_build_assistant/models/pc_mbd.dart';
 import 'package:pc_build_assistant/models/pc_psu.dart';
 
 class BuildManager {
+  static List<String> errors = [];
+  static List<String> testBuild() {
+    errors.clear();
+    _chassisCheck();
+    _motherboardCheck();
+    _processorCheck();
+    _gpuCheck();
+    _psuCheck();
+    return errors;
+  }
+
   static Build build = Build();
-  static int _itemCount = 0;
   static void addComponent(PCComponent component) {
     if (component is PCGraphicsProcessor) {
       build.gpu = component;
@@ -93,6 +103,42 @@ class BuildManager {
       } else {
         count++;
       }
+    }
+  }
+
+//----------------------------------------------BUILD CHECKERS--------------------------------------
+  static void _chassisCheck() {
+    if (build.chassis != null) {
+    } else {
+      errors.add("You must add a Chassis");
+    }
+  }
+
+  static void _motherboardCheck() {
+    if (build.motherboard != null) {
+    } else {
+      errors.add("You must add a Motherboard");
+    }
+  }
+
+  static void _processorCheck() {
+    if (build.processor != null) {
+    } else {
+      errors.add("You must add a Processor");
+    }
+  }
+
+  static void _gpuCheck() {
+    if (build.gpu != null) {
+    } else {
+      errors.add("You haven't added a Graphics Card");
+    }
+  }
+
+  static void _psuCheck() {
+    if (build.psu != null) {
+    } else {
+      errors.add("You must add a Power Supply");
     }
   }
 }

@@ -6,11 +6,11 @@ import 'package:pc_build_assistant/util/constants.dart';
 
 typedef OnComponentRemove(PCComponent component);
 
-class BuildComponentWidget extends StatelessWidget {
+class BuildComponentAdaptiveWidget extends StatelessWidget {
   final PCComponent component;
   final OnComponentRemove onRemove;
   final String title;
-  BuildComponentWidget(
+  BuildComponentAdaptiveWidget(
       {Key key, @required this.component, this.title = "Title", this.onRemove})
       : super(key: key);
   @override
